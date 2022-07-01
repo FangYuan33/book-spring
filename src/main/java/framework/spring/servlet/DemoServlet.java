@@ -1,7 +1,7 @@
 package framework.spring.servlet;
 
+import framework.spring.factory.BeanFactory;
 import framework.spring.service.DemoService;
-import framework.spring.service.impl.DemoServiceImpl;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +12,7 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/demo")
 public class DemoServlet extends HttpServlet {
 
-    private DemoService demoService = new DemoServiceImpl();
+    private DemoService demoService = (DemoService) BeanFactory.getBean("demoService");
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
