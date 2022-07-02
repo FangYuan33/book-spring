@@ -7,3 +7,8 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 ### ioc_easy
 
 ![](images/ioc_easy/ioc-1.jpg)
+
+- 依赖查找主动的byName或byClass来获取Bean
+
+- 依赖注入像是被动的接收依赖的Bean
+

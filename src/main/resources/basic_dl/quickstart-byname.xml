@@ -5,8 +5,18 @@
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="person" class="framework.spring.basic_dl.Person">
-
+        <property name="name" value="FangYuan"/>
+        <property name="age" value="23"/>
     </bean>
 
-    <bean class="framework.spring.dao.impl.DemoDaoImpl"/>
+    <bean id="cat" class="framework.spring.basic_dl.Cat">
+        <property name="name" value="LuLu"/>
+        <property name="master" ref="person"/>
+    </bean>
+
+    <bean id="demoDao" class="framework.spring.dao.impl.DemoDaoImpl"/>
+
+    <bean id="demoService" class="framework.spring.service.impl.DemoServiceImpl">
+        <property name="demoDao" ref="demoDao"/>
+    </bean>
 </beans>

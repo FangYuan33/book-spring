@@ -1,7 +1,8 @@
 package framework.spring;
 
+import framework.spring.basic_dl.Cat;
 import framework.spring.basic_dl.Person;
-import framework.spring.dao.DemoDao;
+import framework.spring.service.DemoService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,10 +15,10 @@ public class QuickstartApplication {
         System.out.println(personByName);
 
         // byClass
-        Person personByClass = factory.getBean(Person.class);
-        System.out.println(personByClass);
+        Cat cat = factory.getBean(Cat.class);
+        System.out.println(cat);
 
-        DemoDao demoDao = factory.getBean(DemoDao.class);
-        System.out.println(demoDao.findAll());
+        DemoService demoService = factory.getBean(DemoService.class);
+        System.out.println(demoService.findAll());
     }
 }

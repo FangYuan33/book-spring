@@ -3,9 +3,9 @@ package framework.spring.basic_dl;
 import lombok.Data;
 
 @Data
-public class Person {
+public class Cat {
 
     private String name;
 
-    private Integer age;
+    private Person master;
 }
