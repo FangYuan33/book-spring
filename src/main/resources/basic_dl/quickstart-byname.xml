@@ -7,4 +7,6 @@
     <bean id="person" class="framework.spring.basic_dl.Person">
 
     </bean>
+
+    <bean class="framework.spring.dao.impl.DemoDaoImpl"/>
 </beans>
