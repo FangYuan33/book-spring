@@ -15,6 +15,7 @@
     </bean>
 
     <bean id="demoDao" class="framework.spring.dao.impl.DemoDaoImpl"/>
+    <bean id="demoDao2" class="framework.spring.dao.impl.DemoDaoImpl"/>
 
     <bean id="demoService" class="framework.spring.service.impl.DemoServiceImpl">
         <property name="demoDao" ref="demoDao"/>

@@ -8,7 +8,15 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 
 ![](images/ioc_easy/ioc-1.jpg)
 
+IOC的实现有两种方式: 依赖查找、依赖注入
+
 - 依赖查找主动的byName或byClass来获取Bean
 
 - 依赖注入像是被动的接收依赖的Bean
+
+【面试题】BeanFactory与ApplicationContext的对比
+
+BeanFactory能够进行配置和对Bean进行管理，ApplicationContext是它的子接口，也是对它的扩展。ApplicationContext支持AOP、
+国际化、事件驱动（ApplicationEvent 、ApplicationListener）和资源管理（Resource）等。
+
 
