@@ -6,6 +6,7 @@ import framework.spring.factory.BeanFactory;
 import framework.spring.pojo.Cat;
 import framework.spring.pojo.Person;
 import framework.spring.dao.DemoDao;
+import framework.spring.pojo.Red;
 import framework.spring.service.DemoService;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.ApplicationContext;
@@ -20,7 +21,13 @@ public class QuickstartApplication {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("basic_dl/quickstart-byname.xml");
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
-        javaConfigGetBean(ctx);
+        spELPractice(ctx);
+    }
+
+    private static void spELPractice(ApplicationContext ctx) {
+        Red red = ctx.getBean(Red.class);
+
+        System.out.println(red);
     }
 
     private static void javaConfigGetBean(ApplicationContext ctx) {
@@ -29,6 +36,9 @@ public class QuickstartApplication {
 
         String[] beanDefinitionNames = ctx.getBeanDefinitionNames();
         Stream.of(beanDefinitionNames).forEach(System.out::println);
+
+        Cat cat = (Cat) ctx.getBean("cat");
+        System.out.println(cat);
     }
 
     private static void beanProvider(ApplicationContext applicationContext) {
