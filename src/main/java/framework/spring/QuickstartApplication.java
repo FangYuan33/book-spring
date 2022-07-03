@@ -3,6 +3,7 @@ package framework.spring;
 import framework.spring.annotation.Color;
 import framework.spring.config.JavaBeanConfig;
 import framework.spring.factory.BeanFactory;
+import framework.spring.pojo.Cat;
 import framework.spring.pojo.Person;
 import framework.spring.dao.DemoDao;
 import framework.spring.service.DemoService;
@@ -25,6 +26,9 @@ public class QuickstartApplication {
     private static void javaConfigGetBean(ApplicationContext ctx) {
         Person me = ctx.getBean(Person.class);
         System.out.println(me);
+
+        String[] beanDefinitionNames = ctx.getBeanDefinitionNames();
+        Stream.of(beanDefinitionNames).forEach(System.out::println);
     }
 
     private static void beanProvider(ApplicationContext applicationContext) {
