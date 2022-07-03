@@ -16,7 +16,7 @@ IOC的实现有两种方式: 依赖查找、依赖注入
 
 - 依赖注入像是被动的接收依赖的Bean
 
-`setter注入`、`构造器注入`，像@Value注解注入也是setter注入
+`setter注入`、`构造器注入`，像@Value注解注入也是setter注入，`参数注入`见下图
 
 **【面试题】BeanFactory与ApplicationContext的对比**
 
@@ -28,3 +28,13 @@ BeanFactory能够进行配置和对Bean进行管理，提供了基本的API，Ap
 **${}** 的取值就是从这些配置项中取。
 
 SpEL是真的强大，它的占位符是 **#{}**,在里边儿可以执行方法，指定值或者拿别的bean的值
+
+![](images/ioc_easy/ioc-2.jpg)
+
+**【面试题】@Autowired注入的原理逻辑**
+
+先拿属性对应的**类型**，去 IOC 容器中找 Bean ，如果找到了一个，直接返回；
+如果找到多个类型一样的 Bean，把属性名拿过去（byName），跟这些 Bean 的 id 逐个对比（@Qualifier），如果有一个相同的，直接返回；
+如果没有任何相同的 id 与要注入的属性名相同，则会抛出 `NoUniqueBeanDefinitionException` 异常。
+
+`@Resource` 注解相当于标注 @Autowired 和 @Qualifier

@@ -1,5 +1,6 @@
 package framework.spring.config;
 
+import framework.spring.pojo.Cat;
 import framework.spring.pojo.Person;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,5 +19,14 @@ public class JavaBeanConfig {
         me.setName("Turing");
 
         return me;
+    }
+
+    @Bean("Miao")
+    public Cat cat(Person person) {
+        Cat cat = new Cat();
+        cat.setMaster(person);
+        cat.setName("Miao");
+
+        return cat;
     }
 }

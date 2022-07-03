@@ -21,7 +21,8 @@ public class QuickstartApplication {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("basic_dl/quickstart-byname.xml");
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
-        spELPractice(ctx);
+
+        javaConfigGetBean(ctx);
     }
 
     private static void spELPractice(ApplicationContext ctx) {
@@ -37,7 +38,7 @@ public class QuickstartApplication {
         String[] beanDefinitionNames = ctx.getBeanDefinitionNames();
         Stream.of(beanDefinitionNames).forEach(System.out::println);
 
-        Cat cat = (Cat) ctx.getBean("cat");
+        Cat cat = (Cat) ctx.getBean("Miao");
         System.out.println(cat);
     }
 
