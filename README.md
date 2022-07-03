@@ -65,15 +65,14 @@ Bean的类型包含**普通Bean**和**工厂Bean**。工厂Bean用来创建使�
 
 ![](images/ioc_easy/ioc-3.jpg)
 
-FactoryBean的创建时机是和IOC容易的初始化一起的。
-
 - **【面试题】BeanFactory与FactoryBean的区别**
 
 `BeanFactory` ：SpringFramework 中实现 IOC 的最底层容器
 （此处的回答可以从两种角度出发：从类的继承结构上看，它是最顶级的接口，也就是最顶层的容器实现；
 从类的组合结构上看，它则是最深层次的容器，ApplicationContext 在最底层组合了 BeanFactory ）
 
-`FactoryBean` ：**创建对象的工厂Bean**，可以使用它来直接创建一些初始化流程比较复杂的对象
+`FactoryBean` ：**创建对象的工厂Bean**，可以使用它来直接创建一些初始化流程比较复杂的对象，
+FactoryBean的创建时机是和IOC容器的初始化一起的，而对具体的对象创建是懒加载机制。
 
 ---
 
@@ -87,3 +86,7 @@ SpringFramework内置的作用域
 - session: 一个会话创建一个（web）
 - application: 一个web应用创建一个
 - websocket: 一个websocket创建一个
+
+---
+
+FactoryBean创建对象只需注入FactoryBean即可，IOC容器自动识别**创建想要的Bean**。

@@ -1,6 +1,8 @@
 package framework.spring.config;
 
 import framework.spring.aware.TestApplicationContextAware;
+import framework.spring.factory.CarStaticFactoryBean;
+import framework.spring.pojo.Car;
 import framework.spring.pojo.Cat;
 import framework.spring.pojo.Person;
 import org.springframework.context.annotation.Bean;
@@ -34,5 +36,10 @@ public class JavaBeanConfig {
     @Bean
     public TestApplicationContextAware testApplicationContextAware() {
         return new TestApplicationContextAware();
+    }
+
+    @Bean
+    public Car car() {
+        return CarStaticFactoryBean.getCar();
     }
 }

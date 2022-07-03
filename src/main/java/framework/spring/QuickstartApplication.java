@@ -4,12 +4,10 @@ import framework.spring.annotation.Color;
 import framework.spring.aware.TestApplicationContextAware;
 import framework.spring.config.JavaBeanConfig;
 import framework.spring.factory.BeanFactory;
+import framework.spring.factory.CarStaticFactoryBean;
 import framework.spring.factory.ToyFactoryBean;
-import framework.spring.pojo.Cat;
-import framework.spring.pojo.Person;
+import framework.spring.pojo.*;
 import framework.spring.dao.DemoDao;
-import framework.spring.pojo.Red;
-import framework.spring.pojo.TimeBean;
 import framework.spring.pojo.base.Toy;
 import framework.spring.service.DemoService;
 import org.springframework.beans.factory.ObjectProvider;
@@ -25,7 +23,16 @@ public class QuickstartApplication {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("basic_dl/quickstart-byname.xml");
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
-        prototypeBean(ctx);
+        staticFactoryBean(ctx);
+    }
+
+    public static void staticFactoryBean(ApplicationContext ctx) {
+        Car car = (Car) ctx.getBean("car");
+        System.out.println(car);
+
+        // 静态工厂不会注册为bean
+//        CarStaticFactoryBean staticFactoryBean = ctx.getBean(CarStaticFactoryBean.class);
+//        System.out.println(staticFactoryBean);
     }
 
     private static void prototypeBean(ApplicationContext ctx) {
