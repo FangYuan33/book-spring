@@ -9,6 +9,7 @@ import framework.spring.pojo.Cat;
 import framework.spring.pojo.Person;
 import framework.spring.dao.DemoDao;
 import framework.spring.pojo.Red;
+import framework.spring.pojo.TimeBean;
 import framework.spring.pojo.base.Toy;
 import framework.spring.service.DemoService;
 import org.springframework.beans.factory.ObjectProvider;
@@ -24,8 +25,15 @@ public class QuickstartApplication {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("basic_dl/quickstart-byname.xml");
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
-        factoryBean(ctx);
+        prototypeBean(ctx);
+    }
 
+    private static void prototypeBean(ApplicationContext ctx) {
+        TimeBean one = ctx.getBean(TimeBean.class);
+        System.out.println(one);
+
+        TimeBean two = ctx.getBean(TimeBean.class);
+        System.out.println(two);
     }
 
     private static void factoryBean(ApplicationContext ctx) {

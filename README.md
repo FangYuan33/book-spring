@@ -74,3 +74,16 @@ FactoryBean的创建时机是和IOC容易的初始化一起的。
 从类的组合结构上看，它则是最深层次的容器，ApplicationContext 在最底层组合了 BeanFactory ）
 
 `FactoryBean` ：**创建对象的工厂Bean**，可以使用它来直接创建一些初始化流程比较复杂的对象
+
+---
+
+如果一个对象允许同时被多个地方访问，那么它的作用域就可以提的很高，
+反之如果一个对象伴随着一个时效性强的、带强状态的动作，那这个作用域就应该局限于这一个动作，在不同的动作下有一个不同的对象。
+
+SpringFramework内置的作用域
+- singleton: 单例bean，默认
+- prototype: 原型bean，每次获取都创建一个
+- request: 一次web请求创建一个
+- session: 一个会话创建一个（web）
+- application: 一个web应用创建一个
+- websocket: 一个websocket创建一个
