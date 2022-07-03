@@ -90,3 +90,24 @@ SpringFramework内置的作用域
 ---
 
 FactoryBean创建对象只需注入FactoryBean即可，IOC容器自动识别**创建想要的Bean**。
+
+---
+
+- Bean的生命周期
+
+![img.png](images/ioc_easy/img.png)
+
+一个对象从被创建，到被垃圾回收，可以宏观的划分为 5 个阶段：
+
+- **创建 / 实例化阶段**：此时会调用类的构造方法，产生一个新的对象
+- **初始化阶段**：此时对象已经创建好，但还没有被正式使用，可能这里面需要做一些额外的操作（如预初始化数据库的连接池）
+- **运行使用期**：此时对象已经完全初始化好，程序正常运行，对象被使用
+- **销毁阶段**：此时对象准备被销毁，已不再使用，需要预先的把自身占用的资源等处理好（如关闭、释放数据库连接）
+- **回收阶段**：此时对象已经完全没有被引用了，被垃圾回收器回收
+
+而Spring**能进行干预的只有初始化阶段和销毁阶段**，我们可以指定`init-method`和`destroy-method`，init-method的执行时机是在属性赋值之后。
+或者也可以通过JSR250规范中的注解`@PostConstruct`和`@PreDestroy`实现再或者实现`InitializingBean`或`DisposableBean`接口
+
+这三种方式中执行的优先级`@PostConstruct` > `InitializingBean` > `init-method`
+
+原型Bean它不会处理`destroy-method`

@@ -23,7 +23,15 @@ public class QuickstartApplication {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("basic_dl/quickstart-byname.xml");
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
-        staticFactoryBean(ctx);
+        lifeCycle(ctx);
+    }
+
+    private static void lifeCycle(ApplicationContext ctx) {
+        AnnotationConfigApplicationContext context = (AnnotationConfigApplicationContext) ctx;
+        Cat miao = (Cat) context.getBean("Miao");
+        System.out.println(miao);
+
+        context.close();
     }
 
     public static void staticFactoryBean(ApplicationContext ctx) {

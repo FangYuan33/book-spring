@@ -24,7 +24,7 @@ public class JavaBeanConfig {
         return me;
     }
 
-    @Bean("Miao")
+    @Bean(value = "Miao", initMethod = "init", destroyMethod = "destroy1")
     public Cat cat(Person person) {
         Cat cat = new Cat();
         cat.setMaster(person);
