@@ -58,3 +58,19 @@ SpEL是真的强大，它的占位符是 **#{}**,在里边儿可以执行方法�
 ---
 
 - 了解：Bean注入大部分可以用@Autowired来解决，它的回调机制是通过一系列`Aware接口`来实现的
+
+---
+
+Bean的类型包含**普通Bean**和**工厂Bean**。工厂Bean用来创建使用注解或xml配置创建起来比较麻烦或依赖具体业务场景的Bean，它的接口方法如下。
+
+![](images/ioc_easy/ioc-3.jpg)
+
+FactoryBean的创建时机是和IOC容易的初始化一起的。
+
+- **【面试题】BeanFactory与FactoryBean的区别**
+
+`BeanFactory` ：SpringFramework 中实现 IOC 的最底层容器
+（此处的回答可以从两种角度出发：从类的继承结构上看，它是最顶级的接口，也就是最顶层的容器实现；
+从类的组合结构上看，它则是最深层次的容器，ApplicationContext 在最底层组合了 BeanFactory ）
+
+`FactoryBean` ：**创建对象的工厂Bean**，可以使用它来直接创建一些初始化流程比较复杂的对象

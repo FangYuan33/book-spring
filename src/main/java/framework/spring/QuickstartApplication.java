@@ -4,10 +4,12 @@ import framework.spring.annotation.Color;
 import framework.spring.aware.TestApplicationContextAware;
 import framework.spring.config.JavaBeanConfig;
 import framework.spring.factory.BeanFactory;
+import framework.spring.factory.ToyFactoryBean;
 import framework.spring.pojo.Cat;
 import framework.spring.pojo.Person;
 import framework.spring.dao.DemoDao;
 import framework.spring.pojo.Red;
+import framework.spring.pojo.base.Toy;
 import framework.spring.service.DemoService;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.ApplicationContext;
@@ -22,7 +24,26 @@ public class QuickstartApplication {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("basic_dl/quickstart-byname.xml");
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
+        factoryBean(ctx);
 
+    }
+
+    private static void factoryBean(ApplicationContext ctx) {
+        Toy toy = ctx.getBean(Toy.class);
+        System.out.println(toy);
+
+        // 这样获取的是Toy实例
+        Object toyEntity = ctx.getBean("toyFactoryBean");
+        System.out.println(toyEntity);
+        // 加上&获取的才是FactoryBean实例
+        Object toyFactoryBean = ctx.getBean("&toyFactoryBean");
+        System.out.println(toyFactoryBean);
+
+        ToyFactoryBean bean = ctx.getBean(ToyFactoryBean.class);
+        System.out.println(bean);
+    }
+
+    private static void applicationContextAware() {
         ApplicationContext context = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
         TestApplicationContextAware bean = context.getBean(TestApplicationContextAware.class);
         bean.printBeanNames();
