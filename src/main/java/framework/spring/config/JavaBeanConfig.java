@@ -1,5 +1,6 @@
 package framework.spring.config;
 
+import framework.spring.aware.TestApplicationContextAware;
 import framework.spring.pojo.Cat;
 import framework.spring.pojo.Person;
 import org.springframework.context.annotation.Bean;
@@ -28,5 +29,10 @@ public class JavaBeanConfig {
         cat.setName("Miao");
 
         return cat;
+    }
+
+    @Bean
+    public TestApplicationContextAware testApplicationContextAware() {
+        return new TestApplicationContextAware();
     }
 }

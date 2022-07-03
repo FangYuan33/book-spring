@@ -1,6 +1,7 @@
 package framework.spring;
 
 import framework.spring.annotation.Color;
+import framework.spring.aware.TestApplicationContextAware;
 import framework.spring.config.JavaBeanConfig;
 import framework.spring.factory.BeanFactory;
 import framework.spring.pojo.Cat;
@@ -22,7 +23,9 @@ public class QuickstartApplication {
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
 
-        javaConfigGetBean(ctx);
+        ApplicationContext context = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
+        TestApplicationContextAware bean = context.getBean(TestApplicationContextAware.class);
+        bean.printBeanNames();
     }
 
     private static void spELPractice(ApplicationContext ctx) {
