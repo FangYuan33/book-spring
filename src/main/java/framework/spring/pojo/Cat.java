@@ -1,4 +1,4 @@
-package framework.spring.basic_dl;
+package framework.spring.pojo;
 
 import lombok.Data;
 

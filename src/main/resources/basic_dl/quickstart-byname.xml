@@ -4,12 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="person" class="framework.spring.basic_dl.Person">
+    <bean id="person" class="framework.spring.pojo.Person">
         <property name="name" value="FangYuan"/>
         <property name="age" value="23"/>
     </bean>
 
-    <bean id="cat" class="framework.spring.basic_dl.Cat">
+    <bean id="cat" class="framework.spring.pojo.Cat">
         <property name="name" value="LuLu"/>
         <property name="master" ref="person"/>
     </bean>
@@ -19,5 +19,9 @@
 
     <bean id="demoService" class="framework.spring.service.impl.DemoServiceImpl">
         <property name="demoDao" ref="demoDao"/>
+    </bean>
+
+    <bean id="red" class="framework.spring.pojo.Red">
+
     </bean>
 </beans>
