@@ -37,7 +37,7 @@ BeanFactory的基础特性：
 
 ##### 1.3 ConfigurableBeanFactory
 
-`Configurable` 开头的 BeanFactory 或者 ApplicationContext 就具有了 set（可写）的操作，
+`Configurable` **开头**的 BeanFactory 或者 ApplicationContext 就具有了 set（可写）的操作，
 可以调用里边儿的定义的方法对BeanFactory进行修改和扩展等，但是它不推荐给开发者使用，因为在程序运行期间不应该对BeanFactory进行频繁的变动。
 
 #### 2. BeanFactory的实现类们
@@ -58,6 +58,21 @@ Bean 定义的合并、Bean 的销毁动作支持等，而且它还定义了模�
 
 DefaultListableBeanFactory是BeanFactory的最终默认实现，它的作用是**先注册 Bean 的定义信息(BeanDefinitionRegistry)，
 再完成 Bean 的创建和初始化动作(AbstractAutowireCapableBeanFactory)**
+
+#### 3. ApplicationContext和它的上下辈们
+![img_2.png](img_2.png)
+
+#####  3.1 ApplicationContext
+
+Application是Spring中最核心的接口，在BeanFactory基础上扩展了**生命周期管理**，**Bean和BeanFactory的后置处理器**，**国际化**以及**事件发布机制**。
+
+继承`ListableBeanFactory`可以访问应用程序中的组件Bean，继承`ResourceLoader`能加载文件资源，
+继承`ApplicationEventPublisher`实现事件的发布和监听机制，继承`MessageSource`实现国际化，继承`HierarchicalBeanFactory`以支持父子上下文。
+
+##### 3.2 ConfigurableApplicationContext
+
+注意它也是`Configurable`开头的，那么它会提供 **"可写"** 的功能，为ApplicationContext添加了配置的功能，它有定义**指定父容器**，**Environment**，
+**BeanFactory的后置处理器**的方法等
 
 ### ioc_easy
 
