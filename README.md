@@ -74,6 +74,43 @@ Application是Spring中最核心的接口，在BeanFactory基础上扩展了**�
 注意它也是`Configurable`开头的，那么它会提供 **"可写"** 的功能，为ApplicationContext添加了配置的功能，它有定义**指定父容器**，**Environment**，
 **BeanFactory的后置处理器**的方法等
 
+##### 3.1 EnvironmentCapable
+
+在 SpringFramework 中，**以 Capable 结尾的接口**，**通常意味着可以通过这个接口的某个特定的方法（通常是 `getXXX()` ）拿到特定的组件。**
+Application实现了这个接口，那么它能拿到`Environment`对象。
+
+我们可以这么理解，Spring的应用在运行时包含两部分：**应用程序本身**和**应用程序运行时的环境**。`Environment`就类似于**运行环境的抽象对象**，
+它内部保存着一些程序运行的配置。
+
+#### 4. ApplicationContext的实现类们
+![img_3.png](img_3.png)
+
+##### 4.1 AbstractApplicationContext
+
+它是Application中最核心的实现类，没有之一。它定义和实现了**绝大部分应用上下文的特性和功能**。
+
+使用了模板方法模式，实际的动作由子类去实现。直接继承了`DefaultResourceLoader`，提供默认的加载资源文件策略，从classpath下加载。
+
+##### 4.2 AbstractXmlApplicationContext
+
+它是最终 `ClassPathXmlApplicationContext` 和 `FileSystemXmlApplicationContext` 的直接父类，已**具备全部基本功能**。
+根据子类不同的配置文件，实现`getConfigResources` 和/或 `getConfigLocations` 方法即可。
+
+##### 4.3 ClassPathXmlApplicationContext
+
+它是一个最终落地实现，对classpath下的xml文件进行加载，如果有多个配置，它解析配置文件有先后之分，
+较新的BeanDefinition会覆盖掉之前的BeanDefinition。
+
+##### 4.4 AnnotationConfigApplicationContext
+
+它继承了`GenericApplicationContext` ，那自然它也只能刷新一次(因为GenericApplicationContext只能刷新(`refresh()方法`)一次)，
+注解驱动的IOC容器。
+
+它也有配置覆盖的概念，如果有多个 `@Configuration` 类，则在以后的类中定义的 `@Bean` 方法将覆盖在先前的类中定义的方法。
+这可以通过一个额外的 `@Configuration` 类来故意覆盖某些 `BeanDefinition`。
+
+它可以配合`XmlBeanDefinitionReader`，这样就能够注解驱动和xml配置通吃了。
+
 ### ioc_easy
 
 ![](images/ioc_easy/ioc-1.jpg)
