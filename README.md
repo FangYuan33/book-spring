@@ -62,19 +62,17 @@ DefaultListableBeanFactory是BeanFactory的最终默认实现，它的作用是*
 #### 3. ApplicationContext和它的上下辈们
 ![img_2.png](img_2.png)
 
-#####  3.1 ApplicationContext
-
 Application是Spring中最核心的接口，在BeanFactory基础上扩展了**生命周期管理**，**Bean和BeanFactory的后置处理器**，**国际化**以及**事件发布机制**。
 
 继承`ListableBeanFactory`可以访问应用程序中的组件Bean，继承`ResourceLoader`能加载文件资源，
 继承`ApplicationEventPublisher`实现事件的发布和监听机制，继承`MessageSource`实现国际化，继承`HierarchicalBeanFactory`以支持父子上下文。
 
-##### 3.2 ConfigurableApplicationContext
+##### 3.1 ConfigurableApplicationContext
 
 注意它也是`Configurable`开头的，那么它会提供 **"可写"** 的功能，为ApplicationContext添加了配置的功能，它有定义**指定父容器**，**Environment**，
 **BeanFactory的后置处理器**的方法等
 
-##### 3.1 EnvironmentCapable
+##### 3.2 EnvironmentCapable
 
 在 SpringFramework 中，**以 Capable 结尾的接口**，**通常意味着可以通过这个接口的某个特定的方法（通常是 `getXXX()` ）拿到特定的组件。**
 Application实现了这个接口，那么它能拿到`Environment`对象。
