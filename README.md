@@ -109,6 +109,32 @@ Application实现了这个接口，那么它能拿到`Environment`对象。
 
 它可以配合`XmlBeanDefinitionReader`，这样就能够注解驱动和xml配置通吃了。
 
+#### 5. 事件机制
+##### 5.1 观察者模式
+观察者模式也被称为**发布订阅模式**，被观察的对象做出**某些动作**，**会自动通知到它的订阅者**。它的三大核心是：**观察者，被观察的主题，订阅者。**
+观察者需要绑定要通知的订阅者，并且要观察指定的主题。
+
+在Spring中体现观察者模式的就是**事件驱动和监听器**，**监听器（Listener）对应订阅者**，事件源充当被观察的主题，用来发布事件，
+**IOC容器本身也是事件广播器，可以理解为观察者。** 可根据下图继续理解
+
+![img_4.png](img_4.png)
+
+##### 5.2 了解Spring内置事件
+
+Spring容器内置事件
+
+- **ContextRefreshedEvent**:  IOC容器刷新完毕但尚未启动，所有单实例 Bean 刚创建完
+- **ContextClosedEvent**: IOC容器已经关闭但尚未销毁所有Bean
+- **ContextStartedEvent**
+- **ContextClosedEvent** 
+
+我们点击以上任意一个事件，都是根据`ApplicationContextEvent`进行扩展的，如下
+
+![](ApplicationContextEvent.jpg)
+
+##### 5.3 自定义事件
+实现ApplicationEvent来自定义事件（直接实现它并没有太大意义，更像是具体业务的触发时机），创建对应事件的监听器，在其中完成想要的业务
+
 ### ioc_easy
 
 ![](images/ioc_easy/ioc-1.jpg)

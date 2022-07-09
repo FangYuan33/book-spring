@@ -1,8 +1,10 @@
 package framework.spring;
 
 import framework.spring.pojo.Person;
+import framework.spring.service.impl.RegisterService;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
 import java.util.stream.Stream;
@@ -10,7 +12,20 @@ import java.util.stream.Stream;
 public class IOCMediumApplication {
 
     public static void main(String[] args) {
-        listableBeanFactoryCurrentBeanFactory();
+        listener();
+    }
+
+    private static void listener() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+                "framework.spring.listener",
+                "framework.spring.service.impl");
+        System.out.println("容器初始化完成...");
+
+        RegisterService registerService = context.getBean(RegisterService.class);
+        registerService.register("FangYuan");
+
+        context.close();
+        System.out.println("容器关闭...");
     }
 
     /**
