@@ -1,5 +1,6 @@
 package framework.spring;
 
+import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.Person;
 import framework.spring.service.impl.RegisterService;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -12,7 +13,13 @@ import java.util.stream.Stream;
 public class IOCMediumApplication {
 
     public static void main(String[] args) {
-        listener();
+        moduleImport();
+    }
+
+    private static void moduleImport() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TavernConfiguration.class);
+
+        Stream.of(context.getBeanDefinitionNames()).forEach(System.out::println);
     }
 
     private static void listener() {
