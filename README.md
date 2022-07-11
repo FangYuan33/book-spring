@@ -153,6 +153,11 @@ Spring容器内置事件
 #### 7.2 condition
 使用`@Conditional`注解，并创建条件类实现Condition接口来定义条件注入的规则
 
+### 8. 组件扫描
+#### 8.1 ComponentScan的basePackageClasses参数
+这个参数指定多个类，扫描的范围是该类所在的包及其子包下的所有Bean
+
+
 ---
 
 ## ioc_easy

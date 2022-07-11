@@ -1,5 +1,6 @@
 package framework.spring;
 
+import framework.spring.config.BasePackageClassConfiguration;
 import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.Person;
 import framework.spring.service.impl.RegisterService;
@@ -13,7 +14,13 @@ import java.util.stream.Stream;
 public class IOCMediumApplication {
 
     public static void main(String[] args) {
-        moduleImport();
+        componentScan();
+    }
+
+    private static void componentScan() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BasePackageClassConfiguration.class);
+
+        Stream.of(context.getBeanDefinitionNames()).forEach(System.out::println);
     }
 
     private static void moduleImport() {
