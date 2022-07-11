@@ -43,6 +43,47 @@ private final ConfigurablePropertyResolver propertyResolver =
 **专业的事情交给专业的人做**，我们称这种方式叫做 **“委派”** ，
 它与代理、装饰者不同：**委派仅仅是将方法的执行转移给另一个对象**，而**代理**可能会在此做**额外的处理**，**装饰者**也会**在方法执行前后做增强**。
 
+### 2. BeanDefinition
+#### 2.1 对BeanDefinition的理解
+
+`BeanDefinition`描述了 SpringFramework 中 bean 的**元信息**，
+它包含 bean 的**类信息（全限定类名）**、**属性（作用域、是否默认、描述信息）**、**行为（是否延迟加载、是否自动注入、初始化和销毁方法）**、
+**依赖关系**、**配置属性（构造器参数、属性）**等。
+`BeanDefinition` 具有**层次性**，并且可以在 IOC 容器初始化阶段被 `BeanDefinitionRegistryPostProcessor` 构造和注册，
+被 `BeanFactoryPostProcessor` 拦截修改等
+
+#### 2.2 BeanDefinition的结构
+
+![img_8.png](img_8.png)
+
+##### 2.2.1 AttributeAccessor
+
+`BeanDefinition` 实现了 `AttributeAccessor 接口`，**具有配置 bean 属性的功能(包括访问、修改和移除等操作)**
+
+##### 2.2.2 AbstractBeanDefinition
+
+基本上它包含了上边提到的信息，但是还是省略了一些常用属性。
+
+##### 2.2.3 GenericBeanDefinition
+
+`GenericBeanDefinition`实现了抽象类`AbstractBeanDefinition`，多了一个`parentName`，相比多了**层次性**（能从父BeanDefinition继承一些属性信息）
+
+##### 2.2.4 RootBeanDefinition与ChildBeanDefinition
+
+`ChildBeanDefinition`和`GenericBeanDefinition`很像，但是它没有默认的无参构造器
+
+`RootBeanDefinition`只能单独出现或作为**父BeanDefinition**出现，不能继承其他的`BeanDefinition`，
+它比`AbstractBeanDefinition`多了一些Bean的**id和别名**，**注解**和**工厂Bean信息**
+
+#### 2.3 BeanDefinition是如何生成的
+
+1. 通过**xml加载的BeanDefinition**，它的读取工具是`XmlBeanDefinitionReader`，它会解析xml配置文件，最终在`DefaultBeanDefinitionDocumentReader`
+的`doRegisterBeanDefinitions方法`下，创建BeanDefinition
+2. 通过**注解和组件扫描构造的BeanDefinition**，它的扫描工具是`ClassPathBeanDefinitionScanner`，
+调用`doScan核心方法`，创建`ScannedGenericBeanDefinition`并返回
+3. **配置类和@Bean注解构造的BeanDefinition**最复杂，最终创建出`ConfigurationClassBeanDefinition`返回
+---
+
 ## ioc_medium
 
 ![img_1.png](img_1.png)

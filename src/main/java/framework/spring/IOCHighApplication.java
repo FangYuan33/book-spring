@@ -1,13 +1,34 @@
 package framework.spring;
 
+import framework.spring.config.JavaBeanConfig;
 import framework.spring.properties.JdbcProperties;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.env.Environment;
 
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        environment();
+        beanDefinition();
+    }
+
+    private static void beanDefinition() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("listable-container.xml");
+
+        // xml配置
+        BeanDefinition person = context.getBeanFactory().getBeanDefinition("person");
+        System.out.println(person);
+
+        AnnotationConfigApplicationContext annotationContext = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
+
+        // 注解java配置
+        BeanDefinition javaBeanConfig = annotationContext.getBeanFactory().getBeanDefinition("javaBeanConfig");
+        System.out.println(javaBeanConfig);
+
+        // @Bean注解配置
+        BeanDefinition me = annotationContext.getBeanFactory().getBeanDefinition("me");
+        System.out.println(me);
     }
 
     private static void environment() {

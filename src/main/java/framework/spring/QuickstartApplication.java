@@ -4,7 +4,6 @@ import framework.spring.annotation.Color;
 import framework.spring.aware.TestApplicationContextAware;
 import framework.spring.config.JavaBeanConfig;
 import framework.spring.factory.BeanFactory;
-import framework.spring.factory.CarStaticFactoryBean;
 import framework.spring.factory.ToyFactoryBean;
 import framework.spring.pojo.*;
 import framework.spring.dao.DemoDao;
@@ -20,7 +19,7 @@ import java.util.stream.Stream;
 
 public class QuickstartApplication {
     public static void main(String[] args) {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("basic_dl/quickstart-byname.xml");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("quickstart-byname.xml");
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(JavaBeanConfig.class);
         lifeCycle(ctx);

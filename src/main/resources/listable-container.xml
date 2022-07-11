@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean class="framework.spring.pojo.Person">
+    <bean id="person" class="framework.spring.pojo.Person">
         <property name="name" value="FYuan"/>
     </bean>
 </beans>
