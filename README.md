@@ -155,8 +155,43 @@ Spring容器内置事件
 
 ### 8. 组件扫描
 #### 8.1 ComponentScan的basePackageClasses参数
-这个参数指定多个类，扫描的范围是该类所在的包及其子包下的所有Bean
+这个参数指定多个类，扫描的范围是该类所在的包及其子包下的所有Bean，
+它的**默认扫描规则**是对以 `@Component` 、`@Repository` 、`@Service` 或 `@Controller` 注解的类的自动检测。
 
+#### 8.2 exclude
+
+```java
+@Configuration
+@ComponentScan(
+        basePackageClasses = Red.class,
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Animal.class))
+public class BasePackageClassConfiguration {
+}
+```
+
+定义排除Animal注解的Bean，扫描范围如下
+
+![img_5.png](img_5.png)
+
+#### 8.3 include
+
+```java
+@Configuration
+@ComponentScan(
+        basePackageClasses = Red.class,
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Animal.class),
+        includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Color.class))
+public class BasePackageClassConfiguration {
+}
+```
+
+定义包含`Color`注解的Bean，即便没有在Black的类上添加Component注解，添加上了Color注解也是能扫描的
+
+```java
+@Color
+public class Black {
+}
+```
 
 ---
 

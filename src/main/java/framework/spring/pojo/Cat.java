@@ -1,5 +1,6 @@
 package framework.spring.pojo;
 
+import framework.spring.annotation.Animal;
 import lombok.Data;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -11,6 +12,7 @@ import javax.annotation.PreDestroy;
 import java.util.List;
 
 @Data
+@Animal
 @Component
 public class Cat implements InitializingBean, DisposableBean {
 

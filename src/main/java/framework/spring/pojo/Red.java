@@ -13,6 +13,6 @@ public class Red {
     @Value("#{T(java.lang.Integer).MAX_VALUE}")
     private Integer num;
 
-    @Value("#{cat.name}")
+    @Value("${hong}")
     private String str;
 }
