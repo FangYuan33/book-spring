@@ -4,6 +4,7 @@ import framework.spring.config.BasePackageClassConfiguration;
 import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.Person;
 import framework.spring.properties.JdbcProperties;
+import framework.spring.properties.JdbcYaml;
 import framework.spring.resolver.DogProtocolResolver;
 import framework.spring.service.impl.RegisterService;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -30,6 +31,8 @@ public class IOCMediumApplication {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(JdbcProperties.class);
 
         System.out.println(context.getBean(JdbcProperties.class));
+
+        System.out.println(context.getBean(JdbcYaml.class));
     }
 
     private static void protocolResolver() throws IOException {

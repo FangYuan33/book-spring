@@ -1,16 +1,15 @@
 package framework.spring.properties;
 
+import framework.spring.resolver.YamlSourceFactory;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ComponentScan(basePackageClasses = JdbcYaml.class)
-@PropertySource("classpath:database.properties")
-public class JdbcProperties {
+@PropertySource(value = "classpath:database.yaml", factory = YamlSourceFactory.class)
+public class JdbcYaml {
 
     @Value("${jdbc.url}")
     private String url;
