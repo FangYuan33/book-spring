@@ -3,6 +3,7 @@ package framework.spring;
 import framework.spring.config.BasePackageClassConfiguration;
 import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.Person;
+import framework.spring.properties.JdbcProperties;
 import framework.spring.resolver.DogProtocolResolver;
 import framework.spring.service.impl.RegisterService;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -22,13 +23,13 @@ import java.util.stream.Stream;
 public class IOCMediumApplication {
 
     public static void main(String[] args) throws IOException {
-        protocolResolver();
+        propertySource();
     }
 
-    private static void componentScan() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BasePackageClassConfiguration.class);
+    private static void propertySource() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(JdbcProperties.class);
 
-        Stream.of(context.getBeanDefinitionNames()).forEach(System.out::println);
+        System.out.println(context.getBean(JdbcProperties.class));
     }
 
     private static void protocolResolver() throws IOException {
@@ -46,6 +47,12 @@ public class IOCMediumApplication {
             System.out.println(readLine);
         }
         bufferedReader.close();
+    }
+
+    private static void componentScan() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BasePackageClassConfiguration.class);
+
+        Stream.of(context.getBeanDefinitionNames()).forEach(System.out::println);
     }
 
     private static void moduleImport() {
