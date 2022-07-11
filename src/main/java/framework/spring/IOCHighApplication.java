@@ -17,5 +17,11 @@ public class IOCHighApplication {
         System.out.println(environment);
 
         System.out.println(environment.getProperty("jdbc.url"));
+
+        StringBuilder profiles = new StringBuilder();
+        for (String defaultProfile : environment.getDefaultProfiles()) {
+            profiles.append(defaultProfile).append(" ");
+        }
+        System.out.println("Default profile: " + profiles);
     }
 }

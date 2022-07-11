@@ -4,6 +4,10 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 并且可以根据应用开发的组件需要进行整合（容器：管理应用中使用的组件Bean、托管Bean的生命周期、事件与监听器的驱动），
 它的核心是IOC和AOP，它的强大之处还体现在对事务的控制上。
 
+在 SpringFramework 的框架编码中，如果有出现一个方法是 **do 开头**，**并且去掉 do 后能找到一个与剩余名称一样的方法**，
+则代表如下含义：**不带 do 开头的方法一般负责前置校验处理、返回结果封装**，**带 do 开头的方法是真正执行逻辑的方法**
+（ 如 getBean 方法的底层会调用 doGetBean 来真正的寻找 IOC 容器的 bean ，createBean 会调用 doCreateBean 来真正的创建一个 bean ）。
+
 ## ioc_high
 ### 1. Environment
 ![img_6.png](img_6.png)
@@ -16,13 +20,28 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 **Environment是SpringFramework中的抽象概念，它包含** `profiles` **和** `properties` **的信息，使用** `profiles`**实现不同环境的Bean装配，**
 **使用** `properties` **来做外部化配置，为组件注入属性值。**
 
-### 1.1 Environment的结构
+#### 1.1 Environment的结构
 ![img_7.png](img_7.png)
 
 - **PropertyResolver**: 可以获取配置元信息，同时也可以解析占位符的信息
 - **ConfigurableEnvironment**: 扩展了set方法，Configurable... 可写
 - **StandardEnvironment**: SpringFramework 中默认使用的标准运行时环境的实现
 
+#### 1.2 Environment中关于profiles的原理
+
+底层是个`Set<String>` 默认情况下定义为`default`，
+我们可以根据`spring.profiles.default`和`spring.profiles.active`来定义默认和生效的profile。
+
+#### 1.3 Environment中解析properties的底层
+
+查看`getProperty方法`，可以在`AbstractEnvironment`发现它组合了一个`ConfigurablePropertyResolver`
+
+```java
+private final ConfigurablePropertyResolver propertyResolver = 
+        new PropertySourcesPropertyResolver(this.propertySources);
+```
+**专业的事情交给专业的人做**，我们称这种方式叫做 **“委派”** ，
+它与代理、装饰者不同：**委派仅仅是将方法的执行转移给另一个对象**，而**代理**可能会在此做**额外的处理**，**装饰者**也会**在方法执行前后做增强**。
 
 ## ioc_medium
 
