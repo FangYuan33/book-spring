@@ -8,6 +8,6 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import({Boss.class, BartenderConfiguration.class, BarImportSelector.class, WaiterRegister.class})
+@Import({BartenderConfiguration.class, BarImportSelector.class, WaiterRegister.class})
 public @interface EnableTavern {
 }
