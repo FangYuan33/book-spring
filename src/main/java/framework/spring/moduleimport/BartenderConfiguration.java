@@ -3,8 +3,10 @@ package framework.spring.moduleimport;
 import framework.spring.pojo.Bartender;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("city")
 public class BartenderConfiguration {
 
     @Bean

@@ -17,7 +17,15 @@ public class IOCMediumApplication {
     }
 
     private static void moduleImport() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TavernConfiguration.class);
+        // 这样指定profile-city是不能生效的，因为传入了配置类，它在内部会自动初始化完成且仅仅执行一次refresh方法，所以指定的profile不能生效
+//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TavernConfiguration.class);
+//        context.getEnvironment().setActiveProfiles("city");
+
+        // 这样就ok了
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+//        context.getEnvironment().setActiveProfiles("city");
+        context.register(TavernConfiguration.class);
+        context.refresh();
 
         Stream.of(context.getBeanDefinitionNames()).forEach(System.out::println);
     }

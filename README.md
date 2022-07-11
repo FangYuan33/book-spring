@@ -135,7 +135,7 @@ Spring容器内置事件
 ##### 5.3 自定义事件
 实现ApplicationEvent来自定义事件（直接实现它并没有太大意义，更像是具体业务的触发时机），创建对应事件的监听器，在其中完成想要的业务
 
-#### 4. 模块装配
+#### 6. 模块装配
 
 模块装配就是**把一个功能模块需要的核心功能组件都装配好**，它的核心原则是：**自定义注解搭配@Import导入需要的组件。**
 类似一些常见的`@Enablexxx`
@@ -145,6 +145,12 @@ Spring容器内置事件
 - 导入配置类（`BartenderConfiguration`）
 - 导入ImportSelector（`BarImportSelector`）
 - 导入ImportBeanDefinitionRegistrar（`WaiterRegister`）
+
+#### 7. 条件装配
+##### 7.1 profile
+可以通过使用`@Profile`注解来指定配置文件条件注入想要的bean.
+
+
 
 ### ioc_easy
 
