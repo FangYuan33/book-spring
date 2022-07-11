@@ -4,6 +4,26 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 并且可以根据应用开发的组件需要进行整合（容器：管理应用中使用的组件Bean、托管Bean的生命周期、事件与监听器的驱动），
 它的核心是IOC和AOP，它的强大之处还体现在对事务的控制上。
 
+## ioc_high
+### 1. Environment
+![img_6.png](img_6.png)
+
+- `Environment`中包含profiles和properties, 这些配置信息会影响IOC容器中bean的注册与创建
+- `Environment`的创建是在`ApplicationContext`创建后才创建的，所以Environment应该是伴随着ApplicationContext的存在而存在
+- `ApplicationContext`中同时包含 `Environment` 和`组件 bean` ，
+而且从 `BeanFactory` 的视角来看，Environment 也是一个 Bean ，只不过它的地位比较特殊
+
+**Environment是SpringFramework中的抽象概念，它包含** `profiles` **和** `properties` **的信息，使用** `profiles`**实现不同环境的Bean装配，**
+**使用** `properties` **来做外部化配置，为组件注入属性值。**
+
+### 1.1 Environment的结构
+![img_7.png](img_7.png)
+
+- **PropertyResolver**: 可以获取配置元信息，同时也可以解析占位符的信息
+- **ConfigurableEnvironment**: 扩展了set方法，Configurable... 可写
+- **StandardEnvironment**: SpringFramework 中默认使用的标准运行时环境的实现
+
+
 ## ioc_medium
 
 ![img_1.png](img_1.png)
