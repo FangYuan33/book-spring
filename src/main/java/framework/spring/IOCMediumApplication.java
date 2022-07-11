@@ -3,24 +3,49 @@ package framework.spring;
 import framework.spring.config.BasePackageClassConfiguration;
 import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.Person;
+import framework.spring.resolver.DogProtocolResolver;
 import framework.spring.service.impl.RegisterService;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 public class IOCMediumApplication {
 
-    public static void main(String[] args) {
-        componentScan();
+    public static void main(String[] args) throws IOException {
+        protocolResolver();
     }
 
     private static void componentScan() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BasePackageClassConfiguration.class);
 
         Stream.of(context.getBeanDefinitionNames()).forEach(System.out::println);
+    }
+
+    private static void protocolResolver() throws IOException {
+        DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
+        DogProtocolResolver dogProtocolResolver = new DogProtocolResolver();
+        defaultResourceLoader.addProtocolResolver(dogProtocolResolver);
+
+        Resource resource = defaultResourceLoader.getResource("dog:dog.txt");
+        InputStream inputStream = resource.getInputStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        String readLine;
+        while ((readLine = bufferedReader.readLine()) != null) {
+            System.out.println(readLine);
+        }
+        bufferedReader.close();
     }
 
     private static void moduleImport() {
