@@ -13,7 +13,13 @@ import org.springframework.context.annotation.FilterType;
 @Configuration
 @ComponentScan(
         basePackageClasses = Red.class,
-        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Animal.class),
-        includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Color.class))
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Animal.class),
+                @ComponentScan.Filter(type = FilterType.CUSTOM, value = BlackFilter.class)
+        },
+        includeFilters = {
+                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Color.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "framework.spring.service.impl.*")
+        })
 public class BasePackageClassConfiguration {
 }

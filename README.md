@@ -193,6 +193,10 @@ public class Black {
 }
 ```
 
+#### 8.4 自定义过滤
+
+自己定义一个过滤器实现`TypeFilter`接口就行，之后在包扫描中指定过滤类型为`FilterType.CUSTOM`
+
 ---
 
 ## ioc_easy
