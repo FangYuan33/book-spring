@@ -82,6 +82,18 @@ private final ConfigurablePropertyResolver propertyResolver =
 2. 通过**注解和组件扫描构造的BeanDefinition**，它的扫描工具是`ClassPathBeanDefinitionScanner`，
 调用`doScan核心方法`，创建`ScannedGenericBeanDefinition`并返回
 3. **配置类和@Bean注解构造的BeanDefinition**最复杂，最终创建出`ConfigurationClassBeanDefinition`返回
+
+#### 2.4 对BeanDefinition的理解
+
+它像我们平时编**写 Class 再 new 出对象一样**，`SpringFramework`面对一个应用程序，
+它也需要对其中的 bean 进行定义抽取，**只有抽取成可以统一类型 / 格式的模型，才能在后续的 bean 对象管理时，进行统一管理**，
+也或者是对特定的 bean 进行特殊化的处理。而这一切的一切，最终**落地到统一类型上，就是 BeanDefinition 这个抽象化的模型**
+
+### 3. BeanDefinitionRegistry
+
+在SpringFramework中，`BeanDefinitionRegistry`的实现是`DefaultListableBeanFactory`，它在内部存放了`BeanDefinition`，
+是`BeanDefinition`的**注册中心**，支持对`BeanDefinition`的**增删查操作**。
+
 ---
 
 ## ioc_medium

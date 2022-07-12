@@ -1,6 +1,8 @@
 package framework.spring;
 
 import framework.spring.config.JavaBeanConfig;
+import framework.spring.moduleimport.TavernConfiguration;
+import framework.spring.pojo.Person;
 import framework.spring.properties.JdbcProperties;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,7 +12,17 @@ import org.springframework.core.env.Environment;
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        beanDefinition();
+        beanDefinitionRegistry();
+    }
+
+    private static void beanDefinitionRegistry() {
+        // beanDefinition的注册
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TavernConfiguration.class);
+        System.out.println(context.getBean("。"));
+
+        // beanDefinition的删除
+        ClassPathXmlApplicationContext xmlContext = new ClassPathXmlApplicationContext("listable-container.xml");
+        System.out.println(xmlContext.getBean(Person.class));
     }
 
     private static void beanDefinition() {
