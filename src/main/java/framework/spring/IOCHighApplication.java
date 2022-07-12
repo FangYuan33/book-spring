@@ -3,6 +3,7 @@ package framework.spring;
 import framework.spring.config.JavaBeanConfig;
 import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.Person;
+import framework.spring.postprocessor.TavernBeanPostProcessor;
 import framework.spring.properties.JdbcProperties;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,7 +13,15 @@ import org.springframework.core.env.Environment;
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        beanDefinitionRegistry();
+        beanPostProcessor();
+    }
+
+    private static void beanPostProcessor() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(TavernBeanPostProcessor.class);
+        context.register(TavernConfiguration.class);
+        context.refresh();
+
     }
 
     private static void beanDefinitionRegistry() {

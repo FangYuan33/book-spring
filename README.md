@@ -94,6 +94,14 @@ private final ConfigurablePropertyResolver propertyResolver =
 在SpringFramework中，`BeanDefinitionRegistry`的实现是`DefaultListableBeanFactory`，它在内部存放了`BeanDefinition`，
 是`BeanDefinition`的**注册中心**，支持对`BeanDefinition`的**增删查操作**。
 
+### 4. BeanPostProcessor
+`BeanPostProcessor` 是一个**回调机制的扩展点**，它的核心工作点是在 bean 的**初始化前后**做一些额外的处理，
+通过实现`Ordered接口`来控制后置处理器的先后顺序，`BeanPostProcessor`**只对当前IOC容器起作用**，**不影响其他 IOC 容器中的Bean**。
+如果要对`BeanDefinition`进行处理，需要使用`BeanFactoryPostProcessor`。
+
+所谓**初始化前后**`BeanPostProcessor`的执行时机
+![img.png](img.png)
+
 ---
 
 ## ioc_medium
@@ -362,7 +370,7 @@ Bean的类型包含**普通Bean**和**工厂Bean**。工厂Bean用来创建使�
 从类的组合结构上看，它则是最深层次的容器，ApplicationContext 在最底层组合了 BeanFactory ）
 
 `FactoryBean` ：**创建对象的工厂Bean**，可以使用它来直接创建一些初始化流程比较复杂的对象，
-FactoryBean的创建时机是和IOC容器的初始化一起的，而对具体的对象创建是懒加载机制。
+FactoryBean的创建时机是和IOC容器的初始化一起的**(生命周期与IOC容器一致**)，而**对具体的对象创建是懒加载机制**。
 
 ---
 
