@@ -102,6 +102,23 @@ private final ConfigurablePropertyResolver propertyResolver =
 所谓**初始化前后**`BeanPostProcessor`的执行时机
 ![img.png](img.png)
 
+![img_1.png](img_1.png)
+#### 4.1 InstantiationAwareBeanPostProcessor
+
+它有两个作用：
+
+- **拦截并替换Bean的实例化动作**
+- **拦截Bean的属性注入**
+
+接口中的方法体现以上两个作用：
+
+- `postProcessBeforeInstantiation`: **拦截 bean 原本的实例化方法，转为用这里的实例化**
+- `postProcessProperties`: **在属性赋值之前触发，该方法返回键值对参与bean的赋值**
+- `postProcessAfterInstantiation`: **这个方法返回Boolean值，控制** `postProcessProperties` **方法的执行，返回false不执行**
+
+在生命周期中的体现
+![img_2.png](img_2.png)
+
 ---
 
 ## ioc_medium

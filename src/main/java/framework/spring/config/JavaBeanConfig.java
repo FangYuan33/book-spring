@@ -2,6 +2,7 @@ package framework.spring.config;
 
 import framework.spring.aware.TestApplicationContextAware;
 import framework.spring.factory.CarStaticFactoryBean;
+import framework.spring.pojo.Boss;
 import framework.spring.pojo.Car;
 import framework.spring.pojo.Cat;
 import framework.spring.pojo.Person;
@@ -41,5 +42,15 @@ public class JavaBeanConfig {
     @Bean
     public Car car() {
         return CarStaticFactoryBean.getCar();
+    }
+
+    @Bean
+    public Boss boss() {
+        return new Boss();
+    }
+
+    @Bean
+    public Boss boss2() {
+        return new Boss();
     }
 }
