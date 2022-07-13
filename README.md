@@ -100,10 +100,11 @@ private final ConfigurablePropertyResolver propertyResolver =
 如果要对`BeanDefinition`进行处理，需要使用`BeanFactoryPostProcessor`。
 
 所谓**初始化前后**`BeanPostProcessor`的执行时机
+
 ![img.png](img.png)
 
-![img_1.png](img_1.png)
 #### 4.1 InstantiationAwareBeanPostProcessor
+![img_1.png](img_1.png)
 
 它有两个作用：
 
@@ -114,10 +115,32 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 - `postProcessBeforeInstantiation`: **拦截 bean 原本的实例化方法，转为用这里的实例化**
 - `postProcessProperties`: **在属性赋值之前触发，该方法返回键值对参与bean的赋值**
-- `postProcessAfterInstantiation`: **这个方法返回Boolean值，控制** `postProcessProperties` **方法的执行，返回false不执行**
+- `postProcessAfterInstantiation`: **这个方法返回Boolean值，控制** `postProcessProperties` **方法的执行，
+返回false不执行**`postProcessProperties`方法
 
 在生命周期中的体现
+
 ![img_2.png](img_2.png)
+
+### 5. BeanFactoryPostProcessor
+
+`BeanFactoryPostProcessor`针对的是`BeanDefinition`，**可以在 bean 实例的初始化之前修改定义信息**，
+**也就是在所有BeanDefinition都注册到BeanFactory后回调，**
+**所有 bean 在没有实例化之前都是以 BeanDefinition 的形式存在**，
+如果提前修改了 BeanDefinition ，那么在 bean 的实例化时，最终创建出的 bean 就会受到影响。
+
+它的作用时机如下图
+
+![img_3.png](img_3.png)
+
+#### 5.1 BeanDefinitionRegistryPostProcessor
+
+`BeanDefinitionRegistryPostProcessor` **在IOC容器将所有`BeanDefinition`都准备好时执行回调，用于注册新的** `BeanDefinition`，
+它的执行时机在`BeanFactoryPostProcessor`之前，也就是说注册完BeanDefinition之后，还可以使用`BeanFactoryPostProcessor`对其进行修改。
+
+![img_4.png](img_4.png)
+
+
 
 ---
 
@@ -371,8 +394,10 @@ SpEL是真的强大，它的占位符是 **#{}**,在里边儿可以执行方法�
 可以不需要大批量的修改就完成依赖注入的对象替换（面向接口编程与依赖注入配合近乎完美）。
 
 ---
+Bean注入大部分可以用`@Autowired`来解决
 
-- 了解：Bean注入大部分可以用@Autowired来解决，它的回调机制是通过一系列`Aware接口`来实现的
+但是也需要了解一下实现`Aware接口`完成bean的注入的操作，比如某个bean实现`ApplicationContextAware`接口，
+那么重写的它的方法之后也能注入 `Application`
 
 ---
 
