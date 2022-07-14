@@ -7,6 +7,9 @@ import org.springframework.core.type.AnnotationMetadata;
 
 import java.util.List;
 
+/**
+ * 模块注入的一种实现方式，根据多个类名来注入多个bean
+ */
 public class JdbcConfigSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {

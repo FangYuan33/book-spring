@@ -3,3 +3,7 @@ framework.spring.annotation.EnableJdbc=\
 
 framework.spring.dao.DemoDao=\
   framework.spring.dao.impl.DemoDaoImpl
+
+java.sql.Driver=\
+  com.mysql.jdbc.Driver,\
+  org.h2.Driver
