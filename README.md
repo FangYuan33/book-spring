@@ -140,7 +140,21 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 ![img_4.png](img_4.png)
 
+### 6. SPI
+**依赖倒转原则**中提到: **应该依赖接口而不是实现类**，但接口最终要有实现类落地。
+`SPI`通过一种 **“服务寻找”的机制** ，**动态的加载接口 / 抽象类对应的具体实现类**。把接口具体实现类的定义和声明权交给了**外部化的配置文件**。
 
+下图是SPI的形象体现
+
+![img_5.png](img_5.png)
+
+#### 6.1 SpringFramework 中的 SPI
+
+它**不仅仅局限于接口 / 抽象类**，它**可以是任何一个类、接口、注解**。
+也正是因为可以**支持注解的 SPI** ，这个特性在SpringBoot中被疯狂利用（如`@EnableAutoConfiguration`）
+
+配置的`properties`必须放在`META-INF`目录下，且文件名必须为 `spring.factories`。
+借助`SpringFactoriesLoader`可以加载该配置，根据需要调用`loadFactories`或`loadFactoryNames`解析出想要的**实现类**或**实现类的全限定名**
 
 ---
 

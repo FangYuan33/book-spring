@@ -1,0 +1,5 @@
+framework.spring.annotation.EnableJdbc=\
+  framework.spring.config.JdbcConfig
+
+framework.spring.dao.DemoDao=\
+  framework.spring.dao.impl.DemoDaoImpl

@@ -1,6 +1,9 @@
 package framework.spring;
 
+import com.alibaba.druid.pool.DruidDataSource;
+import framework.spring.config.DataSourceConfig;
 import framework.spring.config.JavaBeanConfig;
+import framework.spring.dao.DemoDao;
 import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.*;
 import framework.spring.postprocessor.BossInstantiationPostProcessor;
@@ -19,14 +22,26 @@ import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 
 import java.beans.Introspector;
+import java.util.List;
 import java.util.Set;
 
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        programmatic();
+        spi();
+    }
+
+    private static void spi() {
+        List<DemoDao> demoDaos = SpringFactoriesLoader
+                .loadFactories(DemoDao.class, IOCHighApplication.class.getClassLoader());
+        demoDaos.forEach(System.out::println);
+
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfig.class);
+
+        System.out.println(context.getBean(DruidDataSource.class).getUrl());
     }
 
     /**
