@@ -2,22 +2,82 @@ package framework.spring;
 
 import framework.spring.config.JavaBeanConfig;
 import framework.spring.moduleimport.TavernConfiguration;
-import framework.spring.pojo.Ball;
-import framework.spring.pojo.Person;
+import framework.spring.pojo.*;
 import framework.spring.postprocessor.BossInstantiationPostProcessor;
 import framework.spring.postprocessor.TavernBeanPostProcessor;
 import framework.spring.postprocessor.ToyBeanDefinitionRegistryPostProcessor;
 import framework.spring.postprocessor.ToyBeanFactoryPostProcessor;
 import framework.spring.properties.JdbcProperties;
+import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+
+import java.beans.Introspector;
+import java.util.Set;
 
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        beanFactoryPostProcessor();
+        programmatic();
+    }
+
+    /**
+     * 编程式驱动IOC
+     */
+    private static void programmatic() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+
+        AbstractBeanDefinition personDefinition = BeanDefinitionBuilder
+                .rootBeanDefinition(Person.class).addPropertyValue("name", "hsy").getBeanDefinition();
+//        context.registerBeanDefinition("person", personDefinition);
+
+        AbstractBeanDefinition dogDefinition = BeanDefinitionBuilder.rootBeanDefinition(Dog.class)
+                .addPropertyValue("name", "xiao hei")
+                .addPropertyReference("master", "person").getBeanDefinition();
+//        context.registerBeanDefinition("dog", dogDefinition);
+
+        // 包扫描
+        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(context);
+        scanner.addIncludeFilter((metadataReader, metadataReaderFactory) ->
+                metadataReader.getClassMetadata().getClassName().equals(Dog.class.getName()));
+        scanner.addExcludeFilter((metadataReader, metadataReaderFactory) ->
+                metadataReader.getClassMetadata().getClassName().equals(Cat.class.getName()));
+        scanner.addExcludeFilter((metadataReader, metadataReaderFactory) ->
+                metadataReader.getClassMetadata().getClassName().equals(Child.class.getName()));
+        scanner.addExcludeFilter((metadataReader, metadataReaderFactory) ->
+                metadataReader.getClassMetadata().getClassName().equals(Red.class.getName()));
+//        scanner.scan("framework.spring.pojo");
+
+//        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents("framework.spring.pojo");
+//        beanDefinitions.forEach(definition -> {
+//            MutablePropertyValues propertyValues = definition.getPropertyValues();
+//            propertyValues.addPropertyValue("name", definition.getBeanClassName());
+//            propertyValues.addPropertyValue("master", new RuntimeBeanReference("person"));
+//
+//            context.registerBeanDefinition(Introspector
+//                    .decapitalize(definition.getBeanClassName().substring(definition.getBeanClassName().lastIndexOf("."))),
+//                    definition);
+//        });
+
+        // 搭配XmlBeanDefinitionReader实现配置文件的bean加载
+        XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(context);
+        xmlBeanDefinitionReader.loadBeanDefinitions(new ClassPathResource("listable-container.xml"));
+
+        context.refresh();
+        System.out.println("Context refresh finish...");
+
+        // FYuan 被后置处理器移除了
+        for (String beanDefinitionName : context.getBeanDefinitionNames()) {
+            System.out.println(beanDefinitionName);
+        }
     }
 
     private static void beanFactoryPostProcessor() {
