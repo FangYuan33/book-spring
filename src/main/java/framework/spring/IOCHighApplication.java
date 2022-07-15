@@ -4,6 +4,8 @@ import com.alibaba.druid.pool.DruidDataSource;
 import framework.spring.config.DataSourceConfig;
 import framework.spring.config.JavaBeanConfig;
 import framework.spring.dao.DemoDao;
+import framework.spring.event.HierarchicalEvent;
+import framework.spring.listener.HierarchicalEventListener;
 import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.*;
 import framework.spring.postprocessor.BossInstantiationPostProcessor;
@@ -31,7 +33,23 @@ import java.util.Set;
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        spi();
+        hierarchicalEvent();
+    }
+
+    private static void hierarchicalEvent() {
+        AnnotationConfigApplicationContext parent = new AnnotationConfigApplicationContext();
+        parent.addApplicationListener(new HierarchicalEventListener());
+
+        AnnotationConfigApplicationContext son = new AnnotationConfigApplicationContext();
+        son.setParent(parent);
+        son.addApplicationListener(new HierarchicalEventListener());
+
+        parent.refresh();
+        son.refresh();
+
+        // 事件会向上传播，父容器能监听到这两条事件，子容器只有一条
+        parent.publishEvent(new HierarchicalEvent("Parent事件"));
+        son.publishEvent(new HierarchicalEvent("Son事件"));
     }
 
     private static void spi() {

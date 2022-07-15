@@ -158,6 +158,12 @@ private final ConfigurablePropertyResolver propertyResolver =
 配置的`properties`必须放在`META-INF`目录下，且文件名必须为 `spring.factories`。
 借助`SpringFactoriesLoader`可以加载该配置，根据需要调用`loadFactories`或`loadFactoryNames`解析出想要的**实现类**或**实现类的全限定名**
 
+### 7. 事件和监听器
+
+子容器的事件会**向上传播到父容器**，父容器的事件**不会**向下传播
+
+
+
 ---
 
 ## ioc_medium
