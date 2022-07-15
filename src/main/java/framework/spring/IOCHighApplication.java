@@ -6,6 +6,7 @@ import framework.spring.config.JavaBeanConfig;
 import framework.spring.dao.DemoDao;
 import framework.spring.event.HierarchicalEvent;
 import framework.spring.listener.HierarchicalEventListener;
+import framework.spring.listener.PayloadObjectApplicationListener;
 import framework.spring.moduleimport.TavernConfiguration;
 import framework.spring.pojo.*;
 import framework.spring.postprocessor.BossInstantiationPostProcessor;
@@ -33,7 +34,16 @@ import java.util.Set;
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        hierarchicalEvent();
+        payloadEvent();
+    }
+
+    private static void payloadEvent() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.addApplicationListener(new PayloadObjectApplicationListener());
+        context.refresh();
+
+        context.publishEvent("???");
+        context.publishEvent(202207152201L);
     }
 
     private static void hierarchicalEvent() {
