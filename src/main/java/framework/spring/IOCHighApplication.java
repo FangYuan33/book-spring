@@ -34,7 +34,7 @@ import java.util.Set;
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        payloadEvent();
+        hierarchicalEvent();
     }
 
     private static void payloadEvent() {

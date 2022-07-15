@@ -162,7 +162,16 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 子容器的事件会**向上传播到父容器**，父容器的事件**不会**向下传播
 
+#### 7.1 原理
+`ApplicationEventPublisher` 和 `ApplicationEventMulticaster`分别代表事件的**发布器**和**广播器**，**事件发布器用来接受事件，
+并交给广播器来处理**，**事件广播器拿到事件后，广播给监听器**，对应到观察者模式，观察者就相当于是**发布器**和**广播器**，订阅者相当于是**监听器**
 
+看事件发布方法的源码，如下，可以知道**为什么事件会向父容器广播**
+
+![img_9.png](img_9.png)
+
+我们再注意关注一下在本容器中广播事件，调用`ApplicationEventMulticaster`广播器的`multicastEvent方法`，
+点到里边儿会发现使用了**双检锁 + 缓存**的形式来来获取所有的**监听器**， 最后会执行监听器的`onApplicationEvent方法`
 
 ---
 
