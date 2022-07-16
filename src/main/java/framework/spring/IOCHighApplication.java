@@ -34,7 +34,7 @@ import java.util.Set;
 public class IOCHighApplication {
 
     public static void main(String[] args) {
-        hierarchicalEvent();
+        beanDefinitionRegistry();
     }
 
     private static void payloadEvent() {
@@ -152,6 +152,17 @@ public class IOCHighApplication {
         // beanDefinition的删除
         ClassPathXmlApplicationContext xmlContext = new ClassPathXmlApplicationContext("listable-container.xml");
         System.out.println(xmlContext.getBean(Person.class));
+
+        // beanDefinition的合并
+        ClassPathXmlApplicationContext mergeBeanDefinition =
+                new ClassPathXmlApplicationContext("listable-container.xml");
+        System.out.println(mergeBeanDefinition.getBean("car"));
+        System.out.println(mergeBeanDefinition.getBean("ball"));
+
+        BeanDefinition car = mergeBeanDefinition.getBeanFactory().getBeanDefinition("car");
+        BeanDefinition mergedCar = mergeBeanDefinition.getBeanFactory().getMergedBeanDefinition("car");
+        System.out.println(car);
+        System.out.println(mergedCar);
     }
 
     private static void beanDefinition() {

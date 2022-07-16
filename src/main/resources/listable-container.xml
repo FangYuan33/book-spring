@@ -9,5 +9,18 @@
         <property name="name" value="FYuan"/>
     </bean>
 
-    <context:component-scan base-package="framework.spring.postprocessor"/>
+<!--    声明抽象类之后，这样它的子类中都可以有了这个person，BeanDefinition的组合-->
+    <bean id="abstractToy" class="framework.spring.pojo.base.Toy" abstract="true">
+        <property name="master" ref="person"/>
+    </bean>
+
+    <bean id="ball" class="framework.spring.pojo.Ball" parent="abstractToy">
+        <property name="realName" value="ball ball me"/>
+    </bean>
+
+    <bean id="car" class="framework.spring.pojo.Car" parent="abstractToy">
+        <property name="realName" value="car?"/>
+    </bean>
+
+<!--    <context:component-scan base-package="framework.spring.postprocessor"/>-->
 </beans>

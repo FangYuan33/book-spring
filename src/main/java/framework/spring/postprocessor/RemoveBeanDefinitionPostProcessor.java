@@ -27,9 +27,9 @@ public class RemoveBeanDefinitionPostProcessor implements BeanFactoryPostProcess
             if (Person.class.getName().equals(beanDefinition.getBeanClassName())) {
                 TypedStringValue name = (TypedStringValue) beanDefinition.getPropertyValues().get("name");
 
-                if ("FYuan".equals(name.getValue())) {
-                    registry.removeBeanDefinition(beanDefinitionName);
-                }
+//                if ("FYuan".equals(name.getValue())) {
+//                    registry.removeBeanDefinition(beanDefinitionName);
+//                }
             }
         }
     }
