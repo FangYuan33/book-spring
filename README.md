@@ -41,10 +41,22 @@ Bean初始化完成后即进入**运行期使用阶段**，使用完进入**销�
 #### 2.1 xml配置文件的BeanDefinition的加载
 
 `ClassPathXmlApplicationContext`执行refresh方法，借助`XmlBeanDefinitionReader`**读取xml配置文件**，
-之后借助`DefaultBeanDefinitionDocumentReader`**解析xml配置文件**，封装出`BeanDefinition`，注册到`BeanDefinitionRegistry`中
+之后借助`DefaultBeanDefinitionDocumentReader`**解析xml配置文件**，将`<bean>`标签封装成`BeanDefinition`，注册到`BeanDefinitionRegistry`中
 
 在`BeanDefinitionRegistry`中是以Map的形式保存，**key: beanName, value: beanDefinition**, 
 beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHolder中**，**要不然beanName就拿不到了**
+
+#### 2.2 注解配置类的BeanDefinition的加载
+
+注解配置类的解析发生在 `ApplicationContext` 中 `refresh`方法的 `BeanDefinitionRegistryPostProcessor` 的执行阶段，
+它对应的**核心后置处理器**是 `ConfigurationClassPostProcessor` ，执行 `postProcessBeanDefinitionRegistry`方法，
+来**解析配置类**和**注册BeanDefinition**。使用`ClassPathBeanDefinitionScanner`实现包扫描的BeanDefinition封装，
+使用`ConfigurationClassBeanDefinitionReader`实现`@Bean`注解的`BeanDefinition`封装，最后封装到 `BeanDefinitionRegistry` 中
+
+- `ConfigurationClassPostProcessor`会先后处理`@Component`注解、`@PropertySource`注解、`@ComponentScan`注解、`@Import`注解、
+`@ImportResource`注解、`@Bean`注解
+
+---
 
 ## ioc_high
 ### 1. Environment

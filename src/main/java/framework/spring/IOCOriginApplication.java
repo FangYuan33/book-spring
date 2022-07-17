@@ -9,17 +9,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class IOCOriginApplication {
 
     public static void main(String[] args) {
-        xmlBeanDefinition();
+        lifecycle();
     }
 
     private static void xmlBeanDefinition() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext();
         context.setConfigLocation("listable-container.xml");
         context.refresh();
-
-        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext();
-        annotationConfigApplicationContext.register(LifecycleBeanConfiguration.class, Dog.class);
-        annotationConfigApplicationContext.refresh();
     }
 
     private static void lifecycle() {
