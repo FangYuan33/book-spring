@@ -8,6 +8,35 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 则代表如下含义：**不带 do 开头的方法一般负责前置校验处理、返回结果封装**，**带 do 开头的方法是真正执行逻辑的方法**
 （ 如 getBean 方法的底层会调用 doGetBean 来真正的寻找 IOC 容器的 bean ，createBean 会调用 doCreateBean 来真正的创建一个 bean ）。
 
+## ioc_origin
+### 1. Bean的生命周期
+
+![ioc_origin_2](ioc_origin_2.jpg)
+
+#### 1.1 BeanDefinition
+
+`BeanDefinition` 都构造好之后，是不会立即注册到 `BeanFactory` 的，
+这中间有一步执行 `BeanDefinitionRegistryPostProcessor` 的**注册新的Bean的动作**，
+等这些 `BeanDefinitionRegistryPostProcessor` 都执行完 `postProcessBeanDefinitionRegistry` 方法后，
+`BeanDefinition` 才会注册到 `BeanFactory`
+
+![img.png](img.png)
+
+这个动作之后，下一步则是执行 `BeanFactoryPostProcessor` 的 `postProcessBeanFactory` 方法 **修改BeanDefinition配置信息**，
+添加注入的依赖项，给属性赋值等操作。
+
+![img_1.png](img_1.png)
+
+这下之后，`BeanDefinition` 就不再改变了，宣告 `BeanDefinition` 的阶段结束
+
+#### 1.2 Bean实例阶段内容
+
+![ioc_origin_1](ioc_origin_1.jpg)
+
+Bean初始化完成后即进入**运行期使用阶段**，使用完进入**销毁阶段**
+
+![ioc_origin_3](ioc_origin_3.jpg)
+
 ## ioc_high
 ### 1. Environment
 ![img_6.png](images/ioc_high/img_6.png)
@@ -139,8 +168,6 @@ private final ConfigurablePropertyResolver propertyResolver =
 它的执行时机在`BeanFactoryPostProcessor`之前，也就是说注册完BeanDefinition之后，还可以使用`BeanFactoryPostProcessor`对其进行修改。
 
 ![img_4.png](images/ioc_high/img_4.png)
-
-
 
 ### 6. SPI
 **依赖倒转原则**中提到: **应该依赖接口而不是实现类**，但接口最终要有实现类落地。
