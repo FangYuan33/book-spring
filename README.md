@@ -10,7 +10,7 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 
 ## ioc_high
 ### 1. Environment
-![img_6.png](img_6.png)
+![img_6.png](images/ioc_high/img_6.png)
 
 - `Environment`中包含profiles和properties, 这些配置信息会影响IOC容器中bean的注册与创建
 - `Environment`的创建是在`ApplicationContext`创建后才创建的，所以Environment应该是伴随着ApplicationContext的存在而存在
@@ -21,7 +21,7 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 **使用** `properties` **来做外部化配置，为组件注入属性值。**
 
 #### 1.1 Environment的结构
-![img_7.png](img_7.png)
+![img_7.png](images/ioc_high/img_7.png)
 
 - **PropertyResolver**: 可以获取配置元信息，同时也可以解析占位符的信息
 - **ConfigurableEnvironment**: 扩展了set方法，Configurable... 可写
@@ -54,7 +54,7 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 #### 2.2 BeanDefinition的结构
 
-![img_8.png](img_8.png)
+![img_8.png](images/ioc_high/img_8.png)
 
 ##### 2.2.1 AttributeAccessor
 
@@ -101,10 +101,10 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 所谓**初始化前后**`BeanPostProcessor`的执行时机
 
-![img.png](img.png)
+![img.png](images/ioc_high/img.png)
 
 #### 4.1 InstantiationAwareBeanPostProcessor
-![img_1.png](img_1.png)
+![img_1.png](images/ioc_high/img_1.png)
 
 它有两个作用：
 
@@ -120,7 +120,7 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 在生命周期中的体现
 
-![img_2.png](img_2.png)
+![img_2.png](images/ioc_high/img_2.png)
 
 ### 5. BeanFactoryPostProcessor
 
@@ -131,14 +131,16 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 它的作用时机如下图
 
-![img_3.png](img_3.png)
+![img_3.png](images/ioc_high/img_3.png)
 
 #### 5.1 BeanDefinitionRegistryPostProcessor
 
 `BeanDefinitionRegistryPostProcessor` **在IOC容器将所有`BeanDefinition`都准备好时执行回调，用于注册新的** `BeanDefinition`，
 它的执行时机在`BeanFactoryPostProcessor`之前，也就是说注册完BeanDefinition之后，还可以使用`BeanFactoryPostProcessor`对其进行修改。
 
-![img_4.png](img_4.png)
+![img_4.png](images/ioc_high/img_4.png)
+
+
 
 ### 6. SPI
 **依赖倒转原则**中提到: **应该依赖接口而不是实现类**，但接口最终要有实现类落地。
@@ -148,7 +150,7 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 下图是SPI的形象体现
 
-![img_5.png](img_5.png)
+![img_5.png](images/ioc_high/img_5.png)
 
 #### 6.1 SpringFramework 中的 SPI
 
@@ -168,7 +170,7 @@ private final ConfigurablePropertyResolver propertyResolver =
 
 看事件发布方法的源码，如下，可以知道**为什么事件会向父容器广播**
 
-![img_9.png](img_9.png)
+![img_9.png](images/ioc_high/img_9.png)
 
 我们再注意关注一下在本容器中广播事件，调用`ApplicationEventMulticaster`广播器的`multicastEvent方法`，
 点到里边儿会发现使用了**双检锁 + 缓存**的形式来来获取所有的**监听器**， 最后会执行监听器的`onApplicationEvent方法`
