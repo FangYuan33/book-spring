@@ -4,11 +4,22 @@ import framework.spring.config.LifecycleBeanConfiguration;
 import framework.spring.pojo.Dog;
 import framework.spring.pojo.Person;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class IOCOriginApplication {
 
     public static void main(String[] args) {
-        lifecycle();
+        xmlBeanDefinition();
+    }
+
+    private static void xmlBeanDefinition() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext();
+        context.setConfigLocation("listable-container.xml");
+        context.refresh();
+
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext();
+        annotationConfigApplicationContext.register(LifecycleBeanConfiguration.class, Dog.class);
+        annotationConfigApplicationContext.refresh();
     }
 
     private static void lifecycle() {
