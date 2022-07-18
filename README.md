@@ -56,6 +56,46 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 - `ConfigurationClassPostProcessor`会先后处理`@Component`注解、`@PropertySource`注解、`@ComponentScan`注解、`@Import`注解、
 `@ImportResource`注解、`@Bean`注解
 
+### 3. Bean的实例化阶段
+
+关注 refresh 方法中第六行**注册BeanPostProcessor** `registerBeanPostProcessors(beanFactory);` 
+和第十一行**初始化非懒加载的单例Bean** `finishBeanFactoryInitialization(beanFactory);`
+
+#### 3.1 BeanPostProcessor
+
+- **BeanPostProcessorChecker**
+
+![img_2.png](img_2.png)
+
+如果遇到了图上的日志，就是**BeanPostProcessorChecker**的作用。它会检查在 `BeanPostProcessor`**的初始化阶段中是否有 bean 的意外创建**，
+例如在我们的例子中，在创建后置处理器`LifecyclePostProcessor`时需要创建`LifecycleBeanConfiguration`，
+它在**后置处理器创建之前就创建好了**， 那么这个**普通的配置Bean**就没来得及被 `BeanPostProcessor`处理，所以会提示这个信息来让开发者注意
+
+- **为什么注册BeanPostProcessor时有先后顺序，为什么会先注册实现了PriorityOrdered接口的BeanPostProcessor**
+
+因为优先级低的 `BeanPostProcessor` 可能也需要被优先级高的 `BeanPostProcessor` 处理，如果没有先后顺序的话，
+那么低优先级会干预了优先级高的 `BeanPostProcessor`
+
+（可以想想老大老二老三的故事...）
+
+![img_3.png](img_3.png)
+
+像实现了 `PriorityOrdered` 接口的 `AutowiredAnnotationBeanPostProcessor` 用来处理 **@Autowired注解** ，
+`CommonAnnotationBeanPostProcessor` 用来处理**JSR250 规范的注解**，这些都是核心的内部组件，必须先让它们正常到位才行
+
+#### 3.2 真正的bean的实例化
+
+在 **refresh方法**的第十一步，`finishBeanFactoryInitialization(beanFactory)`，此时会初始化**所有的非懒加载的单例bean**，
+实例化bean的入口方式是 **getBean**, **doGetBean**, 这个阶段会**合并BeanDefinition**，**根据bean的定义域来选择bean的实例化策略**。
+之后创建Bean会走**createBean方法**，它会先执行**后置处理器InstantiationAwareBeanPostProcessor**来尝试创建Bean，
+如果创建成功执行`postProcessAfterInitialization 方法`初始化 bean 后返回，否则它会执行**doCreateBean方法** **根据构造器来去创建bean对象**
+
+- **合并BeanDefinition**
+调用的是`getMergedLocalBeanDefinition`方法，在方法中它会**自下而上递归寻找父BeanDefinition**，**再从上到下合并**，
+  最终返回 `BeanDefinition`，**根据合并后的BeanDefinition对Bean进行依赖注入**
+
+- **注解配置类中被 @Bean 标注的方法**，本质上调用工厂方法实例bean
+
 ---
 
 ## ioc_high

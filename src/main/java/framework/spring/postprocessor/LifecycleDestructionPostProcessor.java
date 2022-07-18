@@ -5,6 +5,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 
 public class LifecycleDestructionPostProcessor implements DestructionAwareBeanPostProcessor {
+    public LifecycleDestructionPostProcessor() {
+        System.out.println("LifecycleDestructionPostProcessor Constructor RUN...");
+    }
+
     @Override
     public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
         if (bean instanceof Dog) {

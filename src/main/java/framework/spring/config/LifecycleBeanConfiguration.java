@@ -5,9 +5,14 @@ import framework.spring.postprocessor.LifecycleDestructionPostProcessor;
 import framework.spring.postprocessor.LifecyclePostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.PriorityOrdered;
 
 @Configuration
 public class LifecycleBeanConfiguration {
+
+    public LifecycleBeanConfiguration() {
+        System.out.println("LifecycleBeanConfiguration Constructor RUN...");
+    }
 
     @Bean
     public Person person() {
