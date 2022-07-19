@@ -114,6 +114,21 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 这一步解决bean的循环依赖，**此时bean的实例已经存在了，只不过没有进行属性赋值和依赖注入，** 在此时又有bean需要创建它时，
 不会再去重新创建同样的bean对象，而是直接拿到它的引用
 
+- **populateBean方法**
+
+**回调InstantiationAwareBeanPostProcessor**，这里会执行 `postProcessAfterInstantiation`方法，
+如果返回false则**不再执行下面的属性赋值 + 组件依赖注入的逻辑！**
+
+接下来是自动注入，**通过byName和byType查出来，添加上依赖关系**
+
+再次**回调InstantiationAwareBeanPostProcessor**，执行`postProcessProperties`封装想要赋的值，返回 **PropertyValues对象**。
+**相当于是反复给 PropertyValues对象封装数据**。这里需要注意`AutowiredAnnotationBeanPostProcessor`执行`postProcessProperties`方法，
+收集所有标注了`@Autowired` 、`@Value`、`@Inject` 注解的信息，并**真正的给bean对象属性赋值**
+
+最后执行**属性赋值**操作，**把前面准备好的 PropertyValues 对象封装的内容，应用到当前正在创建的 bean 实例上。**
+使用 `TypeConverter` 可以将一个 String 类型的数据，转换为特定的所需要的类型的数据，它是 SpringFramework 中内部用于类型转换的核心 API。
+
+
 ---
 
 ## ioc_high
