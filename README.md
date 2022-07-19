@@ -94,7 +94,7 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 调用的是`getMergedLocalBeanDefinition`方法，在方法中它会**自下而上递归寻找父BeanDefinition**，**再从上到下合并**，
   最终返回 `BeanDefinition`，**根据合并后的BeanDefinition对Bean进行依赖注入**
 
-- **注解配置类中被 @Bean 标注的方法**，本质上调用工厂方法实例bean
+- **注解配置类中被 @Bean 标注的方法**，本质上调用工厂方法实例bean，底层通过**反射**执行这个方法。
 
 ### 4. Bean的初始化阶段
 
