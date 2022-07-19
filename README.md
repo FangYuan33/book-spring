@@ -104,9 +104,9 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 在doCreateBean方法中有如上一步，**修改合并后的BeanDefinition**，涉及的后置处理器是如下三个
 
-- **InitDestroyAnnotationBeanPostProcessor**: 收集标注了 `@PostConstruct` 和 `@PreDestroy` 注解的后置处理器
-- **CommonAnnotationBeanPostProcessor**: 收集了 `@Resource` 注解的后置处理器
-- **AutowiredAnnotationBeanPostProcessor**: `@Autowired` 注解 `@Value` 注解，
+- **InitDestroyAnnotationBeanPostProcessor**: 收集标注了 `@PostConstruct` 和 `@PreDestroy` 注解的方法后置处理器
+- **CommonAnnotationBeanPostProcessor**: 收集了 `@Resource` 注解的 后置处理器
+- **AutowiredAnnotationBeanPostProcessor**: `@Autowired` 注解，`@Value` 注解，
   如果 classpath 下有来自 JSR 330 的 `@Inject` 注解，也会一并支持
 
 ![](doCreateBean循环依赖.jpg)
@@ -128,6 +128,11 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 最后执行**属性赋值**操作，**把前面准备好的 PropertyValues 对象封装的内容，应用到当前正在创建的 bean 实例上。**
 使用 `TypeConverter` 可以将一个 String 类型的数据，转换为特定的所需要的类型的数据，它是 SpringFramework 中内部用于类型转换的核心 API。
 
+- **initializeBean方法**
+主要执行生命周期方法的回调：**Aware回调**、**BeanPostProcessor的前置回调**、**生命周期回调**、**BeanPostProcessor的后置回调**
+
+- **registerDisposableBeanIfNecessary方法**
+注册**实现 DisposableBean 接口，或者声明了 @PreDestroy 注解，或者声明了 destroy-method 方法**的bean的销毁回调钩子
 
 ---
 
