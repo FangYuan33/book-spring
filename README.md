@@ -16,7 +16,7 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 #### 1.1 BeanDefinition
 
 `BeanDefinition` 都构造好之后，是不会立即注册到 `BeanFactory` 的，
-这中间有一步执行 `BeanDefinitionRegistryPostProcessor` 的**注册新的Bean的动作**，
+这中间有一步执行 `BeanDefinitionRegistryPostProcessor` 的**注册新的BeanDefinition的动作**，
 等这些 `BeanDefinitionRegistryPostProcessor` 都执行完 `postProcessBeanDefinitionRegistry` 方法后，
 `BeanDefinition` 才会注册到 `BeanFactory`
 
@@ -111,28 +111,42 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 ![](doCreateBean循环依赖.jpg)
 
-这一步解决bean的循环依赖，**此时bean的实例已经存在了，只不过没有进行属性赋值和依赖注入，** 在此时又有bean需要创建它时，
+沿源码向下，有一步是**解决bean的循环依赖**，**此时bean的实例已经存在了，只不过没有进行属性赋值和依赖注入，** 在此时又有bean需要创建它时，
 不会再去重新创建同样的bean对象，而是直接拿到它的引用
 
 - **populateBean方法**
 
 **回调InstantiationAwareBeanPostProcessor**，这里会执行 `postProcessAfterInstantiation`方法，
-如果返回false则**不再执行下面的属性赋值 + 组件依赖注入的逻辑！**
+如果返回false则**不再执行下面的属性赋值 + 组件依赖注入的逻辑**。(代码中有相关的练习)
 
-接下来是自动注入，**通过byName和byType查出来，添加上依赖关系**
+接下来是自动注入，**通过byName和byType查出来，添加上依赖关系**，并没有真正的注入
 
 再次**回调InstantiationAwareBeanPostProcessor**，执行`postProcessProperties`封装想要赋的值，返回 **PropertyValues对象**。
-**相当于是反复给 PropertyValues对象封装数据**。这里需要注意`AutowiredAnnotationBeanPostProcessor`执行`postProcessProperties`方法，
-收集所有标注了`@Autowired` 、`@Value`、`@Inject` 注解的信息，并**真正的给bean对象属性赋值**
+赋值的过程就**相当于是反复给 PropertyValues对象封装数据**。
+这里需要注意`AutowiredAnnotationBeanPostProcessor`执行`postProcessProperties`方法时，会**真正的给bean对象属性赋值**，
+使用上文中**已经收集好**的：**所有标注了`@Autowired` 、`@Value`、`@Inject` 注解的信息**
 
 最后执行**属性赋值**操作，**把前面准备好的 PropertyValues 对象封装的内容，应用到当前正在创建的 bean 实例上。**
-使用 `TypeConverter` 可以将一个 String 类型的数据，转换为特定的所需要的类型的数据，它是 SpringFramework 中内部用于类型转换的核心 API。
+过程中借助了 `TypeConverter`，它可以将一个 String 类型的数据，转换为特定的所需要的类型的数据，
+它是 SpringFramework 中内部用于类型转换的核心 API。
 
 - **initializeBean方法**
 主要执行生命周期方法的回调：**Aware回调**、**BeanPostProcessor的前置回调**、**生命周期回调**、**BeanPostProcessor的后置回调**
 
 - **registerDisposableBeanIfNecessary方法**
 注册**实现 DisposableBean 接口，或者声明了 @PreDestroy 注解，或者声明了 destroy-method 方法**的bean的销毁回调钩子
+
+#### 4.2 用心去描述 bean初始化部分的过程
+
+**bean被实例化后，会进行属性赋值和依赖注入，以及执行初始化阶段的生命周期方法回调。**
+
+**在`populateBean`方法中，借助后置处理器执行`postProcessProperties`方法完成依赖注入。**（@Autowired 、@Value 、@Resource 、@Inject）
+
+**属性赋值和依赖注入完成之后，会回调执行bean的初始化方法和后置处理器的逻辑，首先是 `Aware` 相关接口的注入**，
+**随后执行后置处理器的前置回调，并且在前置回调方法中执行被标记了`@PostConstruct`注解的方法，所有的后置处理器前置回调完成后，**
+**执行`InitializingBean` 的 `afterPropertiesSet` 方法，随后是 `init-method` 指定的方法，这些执行完后，会执行后置处理器的后置回调。**
+
+**全部的bean初始化完成后，`ApplicationContext`的`start`方法触发时，才会去执行实现了`Lifecycle`接口的`bean`的`start`方法**
 
 ---
 
