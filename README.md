@@ -96,6 +96,24 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 - **注解配置类中被 @Bean 标注的方法**，本质上调用工厂方法实例bean
 
+### 4. Bean的初始化阶段
+
+#### 4.1 doCreateBean
+
+![](未命名绘图.jpg)
+
+在doCreateBean方法中有如上一步，**修改合并后的BeanDefinition**，涉及的后置处理器是如下三个
+
+- **InitDestroyAnnotationBeanPostProcessor**: 收集标注了 `@PostConstruct` 和 `@PreDestroy` 注解的后置处理器
+- **CommonAnnotationBeanPostProcessor**: 收集了 `@Resource` 注解的后置处理器
+- **AutowiredAnnotationBeanPostProcessor**: `@Autowired` 注解 `@Value` 注解，
+  如果 classpath 下有来自 JSR 330 的 `@Inject` 注解，也会一并支持
+
+![](doCreateBean循环依赖.jpg)
+
+这一步解决bean的循环依赖，**此时bean的实例已经存在了，只不过没有进行属性赋值和依赖注入，** 在此时又有bean需要创建它时，
+不会再去重新创建同样的bean对象，而是直接拿到它的引用
+
 ---
 
 ## ioc_high
