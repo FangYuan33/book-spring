@@ -21,7 +21,7 @@ Spring的模块划分
 ## ioc_origin
 ### 1. Bean的生命周期总览
 
-![ioc_origin_2](ioc_origin_2.jpg)
+![ioc_origin_2](images/ioc_origin/ioc_origin_2.jpg)
 
 #### 1.1 BeanDefinition
 
@@ -30,22 +30,22 @@ Spring的模块划分
 等这些 `BeanDefinitionRegistryPostProcessor` 都执行完 `postProcessBeanDefinitionRegistry` 方法后，
 `BeanDefinition` 才会注册到 `BeanFactory`
 
-![img.png](img.png)
+![img.png](images/ioc_origin/img.png)
 
 这个动作之后，下一步则是执行 `BeanFactoryPostProcessor` 的 `postProcessBeanFactory` 方法 **修改BeanDefinition配置信息**，
 添加注入的依赖项，给属性赋值等操作。
 
-![img_1.png](img_1.png)
+![img_1.png](images/ioc_origin/img_1.png)
 
 这下之后，`BeanDefinition` 就不再改变了，宣告 `BeanDefinition` 的阶段结束
 
 #### 1.2 Bean实例阶段内容
 
-![ioc_origin_1](ioc_origin_1.jpg)
+![ioc_origin_1](images/ioc_origin/ioc_origin_1.jpg)
 
 Bean初始化完成后即进入**运行期使用阶段**，使用完进入**销毁阶段**
 
-![ioc_origin_3](ioc_origin_3.jpg)
+![ioc_origin_3](images/ioc_origin/ioc_origin_3.jpg)
 
 ### 2. BeanDefinition阶段细则！
 #### 2.1 xml配置文件的BeanDefinition的加载
@@ -75,7 +75,7 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 - **BeanPostProcessorChecker**
 
-![img_2.png](img_2.png)
+![img_2.png](images/ioc_origin/img_2.png)
 
 如果遇到了图上的日志，就是**BeanPostProcessorChecker**的作用。它会检查在 `BeanPostProcessor`**的初始化阶段中是否有 bean 的意外创建**，
 例如在我们的例子中，在创建后置处理器`LifecyclePostProcessor`时需要创建`LifecycleBeanConfiguration`，
@@ -88,7 +88,7 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 （可以想想老大老二老三的故事...）
 
-![img_3.png](img_3.png)
+![img_3.png](images/ioc_origin/img_3.png)
 
 像实现了 `PriorityOrdered` 接口的 `AutowiredAnnotationBeanPostProcessor` 用来处理 **@Autowired注解** ，
 `CommonAnnotationBeanPostProcessor` 用来处理**JSR250 规范的注解**，这些都是核心的内部组件，必须先让它们正常到位才行
@@ -112,7 +112,7 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 #### 4.1 doCreateBean
 
-![](未命名绘图.jpg)
+![](images/ioc_origin/未命名绘图.jpg)
 
 在doCreateBean方法中有如上一步，**修改合并后的BeanDefinition**，涉及的后置处理器是如下三个
 
@@ -121,7 +121,7 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 - **AutowiredAnnotationBeanPostProcessor**: `@Autowired` 注解，`@Value` 注解，
   如果 classpath 下有来自 JSR 330 的 `@Inject` 注解，也会一并支持
 
-![](doCreateBean循环依赖.jpg)
+![](images/ioc_origin/doCreateBean循环依赖.jpg)
 
 沿源码向下，有一步是**解决bean的循环依赖**，**此时bean的实例已经存在了，只不过没有进行属性赋值和依赖注入，** 在此时又有bean需要创建它时，
 不会再去重新创建同样的bean对象，而是直接拿到它的引用
