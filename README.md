@@ -131,7 +131,7 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 它是 SpringFramework 中内部用于类型转换的核心 API。
 
 - **initializeBean方法**
-主要执行生命周期方法的回调：**Aware回调**、**BeanPostProcessor的前置回调**、**生命周期回调**、**BeanPostProcessor的后置回调**
+主要执行生命周期方法的回调：**Aware回调**、**BeanPostProcessor的前置回调**、**生命周期的初始化回调**、**BeanPostProcessor的后置回调**
 
 - **registerDisposableBeanIfNecessary方法**
 注册**实现 DisposableBean 接口，或者声明了 @PreDestroy 注解，或者声明了 destroy-method 方法**的bean的销毁回调钩子
@@ -154,6 +154,62 @@ bean对象在销毁时，由`ApplicationContext`发起关闭`close()`动作，�
 
 **销毁时会先将当前bean依赖的所有bean都销毁，销毁时会回调自定义的bean的销毁方法**（`@PreDestroy`，`DisposableBean`，`destroy-method`），
 **如果 bean 中有定义内部 bean 则会一并销毁，最后销毁那些依赖了当前 bean 的 bean**
+
+### 6. 我们能切入的点
+#### 6.1 invokeBeanFactoryPostProcessors(refresh方法的第5步)
+##### 6.1.1 ImportSelector & ImportBeanDefinitionRegistrar
+
+`ConfigurationClassPostProcessor` 的执行过程中，会解析 `@Import` 注解，
+取出里面实现了 `ImportSelector`和`ImportBeanDefinitionRegistrar` 接口并执行，
+其中`ImportBeanDefinitionRegistrar`还 **能拿到 `BeanDefinitionRegistry`** ，
+由此可供扩展的动作主要是给 `BeanDefinitionRegistry` 中注册新的 `BeanDefinition`
+
+##### 6.1.2 BeanDefinitionRegistryPostProcessor
+
+使用 `BeanDefinitionRegistryPostProcessor` 可以拿到 `BeanDefinitionRegistry` 的 API ，
+直接向 IOC 容器中注册新的 `BeanDefinition`，
+**自定义的 `BeanDefinitionRegistryPostProcessor`，在没有实现`PriorityOrdered`接口时， 
+执行时机要比内置的 `ConfigurationClassPostProcessor` 晚**
+
+##### 6.1.3 BeanFactoryPostProcessor、
+
+`BeanFactoryPostProcessor` 的切入时机紧随 `BeanDefinitionRegistryPostProcessor` 之后，
+在此时的回调能拿到的参数是 `ConfigurableListableBeanFactory`，提供的是对 `BeanDefinition` **获取和修改的权限**
+
+`BeanFactoryPostProcessor` 的处理阶段是可以提早初始化 bean 对象的，
+因为这个阶段下只有 `ApplicationContextAwareProcessor` 注册到了 `BeanFactory` 中，
+没有其余关键的 `BeanPostProcessor` ，所以**这个阶段初始化的 bean 有一个共同的特点：能使用 `Aware` 回调注入，
+但无法使用 `@Autowired` 等自动注入的注解进行依赖注入，且不会产生任何代理对象**
+
+#### 6.2 finishBeanFactoryInitialization(refresh方法的第11步)
+##### 6.2.1 InstantiationAwareBeanPostProcessor的postProcessBeforeInstantiation方法
+
+每个 bean 在创建之前都会**尝试**着使用 `InstantiationAwareBeanPostProcessor` 来代替创建，
+如果没有任何 `InstantiationAwareBeanPostProcessor` 可以拦截创建，则会走真正的 bean 对象**实例化流程**
+
+##### 6.2.2 MergedBeanDefinitionPostProcessor的postProcessMergedBeanDefinition方法
+
+在bean对象**已经被创建出来**之后，`doCreateBean` 方法会走到 `applyMergedBeanDefinitionPostProcessors` 方法，
+让这些 `MergedBeanDefinitionPostProcessor` 去收集 bean 所属的 Class 中的注解信息： 
+分别是 `InitDestroyAnnotationBeanPostProcessor` （收集 `@PostConstruct` 与 `@PreDestroy` 注解）、
+`CommonAnnotationBeanPostProcessor` （收集 JSR 250 `@Resource`等其它注解）、
+`AutowiredAnnotationBeanPostProcessor` （收集自动注入相关的注解）
+
+##### 6.2.3 InstantiationAwareBeanPostProcessor的postProcessAfterInstantiation方法
+
+**返回ture或false来控制是否继续走接下来的 populateBean 和 initializeBean 方法初始化 bean**
+
+##### 6.2.4 InstantiationAwareBeanPostProcessor#postProcessProperties
+
+这个方法将对bean对象对应的 `PropertyValues` 中封装赋值和注入的数据应用给 bean 实例
+
+在该阶段 SpringFramework 内部起作用的后置处理器是 `AutowiredAnnotationBeanPostProcessor` ，
+它会搜集 bean 所属的 Class 中标注了 `@Autowired` 、`@Value` 、`@Resource` 等注解的属性和方法，并反射赋值 / 调用
+
+##### 6.2.5 BeanPostProcessor
+
+`BeanPostProcessor` 的前后两个执行动作 `postProcessBeforeInitialization` 和 `postProcessAfterInitialization`，
+已经再熟悉不过了，它会在**初始化动作之前和之后**完成回调
 
 ---
 
