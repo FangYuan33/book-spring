@@ -148,6 +148,13 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 **全部的bean初始化完成后，`ApplicationContext`的`start`方法触发时，才会去执行实现了`Lifecycle`接口的`bean`的`start`方法**
 
+### 5. Bean的销毁阶段
+
+bean对象在销毁时，由`ApplicationContext`发起关闭`close()`动作，销毁时由`BeanFactory`取出所有单实例bean，并逐个销毁。
+
+**销毁时会先将当前bean依赖的所有bean都销毁，销毁时会回调自定义的bean的销毁方法**（`@PreDestroy`，`DisposableBean`，`destroy-method`），
+**如果 bean 中有定义内部 bean 则会一并销毁，最后销毁那些依赖了当前 bean 的 bean**
+
 ---
 
 ## ioc_high
