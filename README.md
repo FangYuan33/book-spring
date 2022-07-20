@@ -8,6 +8,16 @@ Spring是一个开源的企业级Java开发框架，可以更容易的构建出J
 则代表如下含义：**不带 do 开头的方法一般负责前置校验处理、返回结果封装**，**带 do 开头的方法是真正执行逻辑的方法**
 （ 如 getBean 方法的底层会调用 doGetBean 来真正的寻找 IOC 容器的 bean ，createBean 会调用 doCreateBean 来真正的创建一个 bean ）。
 
+Spring的模块划分
+- beans、core、context、expression 【核心包、容器】
+- aop【切面编程】
+- jdbc【整合jdbc】
+- orm【整合orm框架】
+- tx【事务控制】
+- web【web层技术】
+- test【整合测试】
+- ...
+
 ## ioc_origin
 ### 1. Bean的生命周期总览
 
@@ -85,8 +95,10 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 #### 3.2 真正的bean的实例化
 
+所有的非懒加载的单例bean 初始化之前，会**先初始化所有的 BeanPostProcessor**
+
 在 **refresh方法**的第十一步，`finishBeanFactoryInitialization(beanFactory)`，此时会初始化**所有的非懒加载的单例bean**，
-实例化bean的入口方式是 **getBean**, **doGetBean**, 这个阶段会**合并BeanDefinition**，**根据bean的定义域来选择bean的实例化策略**。
+实例化bean的入口方式是 **getBean**, **doGetBean**, 这个阶段会**合并BeanDefinition**，**根据bean的作用域来选择bean的实例化策略**。
 之后创建Bean会走**createBean方法**，它会先执行**后置处理器InstantiationAwareBeanPostProcessor**来尝试创建Bean，
 如果创建成功执行`postProcessAfterInitialization 方法`初始化 bean 后返回，否则它会执行**doCreateBean方法** **根据构造器来去创建bean对象**
 
@@ -389,9 +401,9 @@ BeanFactory的基础特性：
 
 - **最基础的容器**
 - **定义了作用域的概念**
-- **集成环境配置**：它本身是所有 Bean 的注册中心，所有的 Bean 最终都在BeanFactory中创建和保存。
+- **集成环境配置**(Environment)：它本身是所有 Bean 的注册中心，所有的 Bean 最终都在BeanFactory中创建和保存。
 另外 BeanFactory 中还集成了配置信息，咱通过加载外部的 properties 文件，借助 SpringFramework 的方式将配置文件的属性值设置到 Bean 对象中。
-- **支持多种类型的配置源**
+- **支持多种类型的配置源**(Resource, PropertySource)
 - **完整的生命周期控制机制**
 - **层次性的设计**：可以支持**父子结构**，由HierarchicalBeanFactory实现
 
@@ -438,10 +450,12 @@ DefaultListableBeanFactory是BeanFactory的最终默认实现，它的作用是*
 ### 3. ApplicationContext和它的上下辈们
 ![img_2.png](images/ioc_medium/img_2.png)
 
-Application是Spring中最核心的接口，在BeanFactory基础上扩展了**生命周期管理**，**Bean和BeanFactory的后置处理器**，**国际化**以及**事件发布机制**。
+ApplicationContext是Spring中最核心的接口，在BeanFactory基础上扩展了**生命周期管理**，**Bean和BeanFactory的后置处理器**，**国际化**以及**事件发布机制**。
 
 继承`ListableBeanFactory`可以访问应用程序中的组件Bean，继承`ResourceLoader`能加载文件资源，
 继承`ApplicationEventPublisher`实现事件的发布和监听机制，继承`MessageSource`实现国际化，继承`HierarchicalBeanFactory`以支持父子上下文。
+
+虽然`ApplicationContext`实现了`BeanFactory`接口，但是它与BeanFactory的关系是组合，包括对其他的接口实现一样，在底层也是组合了它们。
 
 #### 3.1 ConfigurableApplicationContext
 
@@ -451,7 +465,7 @@ Application是Spring中最核心的接口，在BeanFactory基础上扩展了**�
 #### 3.2 EnvironmentCapable
 
 在 SpringFramework 中，**以 Capable 结尾的接口**，**通常意味着可以通过这个接口的某个特定的方法（通常是 `getXXX()` ）拿到特定的组件。**
-Application实现了这个接口，那么它能拿到`Environment`对象。
+ApplicationContext实现了这个接口，那么它能拿到`Environment`对象。
 
 我们可以这么理解，Spring的应用在运行时包含两部分：**应用程序本身**和**应用程序运行时的环境**。`Environment`就类似于**运行环境的抽象对象**，
 它内部保存着一些程序运行的配置。
