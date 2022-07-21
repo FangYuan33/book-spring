@@ -5,7 +5,6 @@ import framework.spring.factory.BeanFactory;
 import framework.spring.service.DemoService;
 import framework.spring.utils.LogUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ import java.lang.reflect.Proxy;
 @WebServlet(urlPatterns = "/demo")
 public class DemoServlet extends HttpServlet {
 
-    private DemoService demoService;
+    private DemoService demoService = (DemoService) BeanFactory.getBean("demoService");
 
     private DemoService decoratorDemoService = new DemoServiceDecorator((DemoService) BeanFactory.getBean("demoService"));
 
@@ -24,7 +23,7 @@ public class DemoServlet extends HttpServlet {
 
     @Override
     public void init() {
-        jdkProxy();
+        // jdkProxy();
     }
 
     /**
