@@ -17,5 +17,10 @@ public class DemoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.getWriter().println(demoService.findAll().toString());
+
+        demoService.add("FYuan", 33);
+        demoService.subtract("FYuan", 33);
+        demoService.multiply("FYuan", 33);
+        demoService.divide("FYuan", 33);
     }
 }
