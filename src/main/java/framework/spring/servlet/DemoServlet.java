@@ -13,15 +13,13 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/demo")
 public class DemoServlet extends HttpServlet {
 
-    private DemoService demoService = new DemoServiceDecorator((DemoService) BeanFactory.getBean("demoService"));
+    private DemoService decoratorDemoService = new DemoServiceDecorator((DemoService) BeanFactory.getBean("demoService"));
 
+    private DemoService abstractMethodDemoService = (DemoService) BeanFactory.getBean("demoService");
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.getWriter().println(demoService.findAll().toString());
+        resp.getWriter().println(abstractMethodDemoService.findAll().toString());
 
-        demoService.add("FYuan", 33);
-        demoService.subtract("FYuan", 33);
-        demoService.multiply("FYuan", 33);
-        demoService.divide("FYuan", 33);
+        abstractMethodDemoService.add("FYuan", 33);
     }
 }

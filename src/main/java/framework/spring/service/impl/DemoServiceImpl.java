@@ -2,11 +2,12 @@ package framework.spring.service.impl;
 
 import framework.spring.dao.DemoDao;
 import framework.spring.factory.BeanFactory;
+import framework.spring.service.AbstractDemoService;
 import framework.spring.service.DemoService;
 
 import java.util.List;
 
-public class DemoServiceImpl implements DemoService {
+public class DemoServiceImpl extends AbstractDemoService implements DemoService {
 
     private DemoDao demoDao = (DemoDao) BeanFactory.getBean("demoDao");
 
@@ -16,22 +17,17 @@ public class DemoServiceImpl implements DemoService {
     }
 
     @Override
+    protected List<String> doFindAll() {
+        return demoDao.findAll();
+    }
+
+    @Override
     public int add(String userId, int points) {
         return points;
     }
 
     @Override
-    public int subtract(String userId, int points) {
-        return points;
-    }
-
-    @Override
-    public int multiply(String userId, int points) {
-        return points;
-    }
-
-    @Override
-    public int divide(String userId, int points) {
+    protected int doAdd(String userId, int points) {
         return points;
     }
 }
