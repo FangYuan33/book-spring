@@ -1,5 +1,6 @@
 package framework.spring.servlet;
 
+import framework.spring.decorator.DemoServiceDecorator;
 import framework.spring.factory.BeanFactory;
 import framework.spring.service.DemoService;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/demo")
 public class DemoServlet extends HttpServlet {
 
-    private DemoService demoService = (DemoService) BeanFactory.getBean("demoService");
+    private DemoService demoService = new DemoServiceDecorator((DemoService) BeanFactory.getBean("demoService"));
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
