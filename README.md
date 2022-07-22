@@ -24,3 +24,7 @@ Spring的模块划分
 - [IOC进阶](IOC_MEDIUM.md)
 - [IOC高级](IOC_HIGH.md)
 - [IOC原理](IOC_ORIGIN.md)
+
+### 2. AOP 部分笔记
+
+- [AOP入门](AOP_EASY.md)
