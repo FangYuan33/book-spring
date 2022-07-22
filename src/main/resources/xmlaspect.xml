@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="financeService" class="framework.spring.service.impl.FinanceService"/>
+
+    <bean id="orderService" class="framework.spring.service.impl.OrderServiceImpl"/>
+
+    <bean id="logger" class="framework.spring.proxy.Logger"/>
+
+    <aop:config>
+        <aop:aspect id="loggerAspect" ref="logger">
+            <aop:before method="beforePrint"
+                        pointcut="execution(public void framework.spring.service.impl.FinanceService.addMoney(double))"/>
+
+            <aop:after method="afterPrint"
+                       pointcut="execution(public * framework.spring.service.impl.FinanceService.*(*))"/>
+
+            <aop:after-returning method="afterReturningPrint"
+                                 pointcut="execution(public * framework.spring.service.impl.*.*(*))"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
