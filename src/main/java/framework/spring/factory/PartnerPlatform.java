@@ -2,6 +2,9 @@ package framework.spring.factory;
 
 import framework.spring.proxy.IndividualPartner;
 import framework.spring.proxy.Partner;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -25,15 +28,17 @@ public class PartnerPlatform {
      * @param money 指定陪玩的预算，供之后调用 receiveMoney 方法时判断支付的够不够
      */
     public static Partner getPartner(int money) {
-        Partner partner = PARTNERS.remove(0);
+        IndividualPartner partner = (IndividualPartner) PARTNERS.remove(0);
 
         return (Partner) Proxy.newProxyInstance(partner.getClass().getClassLoader(), partner.getClass().getInterfaces(),
                 new InvocationHandler() {
-                    private int budget = money;
+                    private final int budget = money;
                     private boolean status = false;
 
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        System.out.println("jdk动态代理...");
+
                         if ("receiveMoney".equals(method.getName())) {
                             // 支付的钱
                             int money = (int) args[0];
@@ -52,5 +57,33 @@ public class PartnerPlatform {
                         }
                     }
                 });
+    }
+
+    public static Partner getCglibPartner(int money) {
+        Partner partner = PARTNERS.remove(0);
+
+        return (Partner) Enhancer.create(partner.getClass(), new MethodInterceptor() {
+            private final int budget = money;
+            private boolean status = false;
+
+            @Override
+            public Object intercept(Object proxy, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+                System.out.println("Cglib动态代理...");
+
+                if ("receiveMoney".equals(method.getName())) {
+                    int money = (int) objects[0];
+
+                    objects[0] = money / 2;
+
+                    this.status = money >= budget;
+                }
+
+                if (status) {
+                    return method.invoke(partner, objects);
+                }
+
+                return null;
+            }
+        });
     }
 }

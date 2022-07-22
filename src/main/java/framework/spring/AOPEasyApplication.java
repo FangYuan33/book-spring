@@ -11,7 +11,11 @@ public class AOPEasyApplication {
 
         Partner partner = PartnerPlatform.getPartner(100);
 
-        partner.receiveMoney(100);
+        partner.receiveMoney(0);
         partner.playWith(player);
+
+        Partner cglibPartner = PartnerPlatform.getCglibPartner(100);
+        cglibPartner.receiveMoney(100);
+        cglibPartner.playWith(player);
     }
 }

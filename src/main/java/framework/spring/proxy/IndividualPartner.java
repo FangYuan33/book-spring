@@ -8,6 +8,9 @@ public class IndividualPartner implements Partner {
 
     private String name;
 
+    public IndividualPartner() {
+    }
+
     public IndividualPartner(String name) {
         this.name = name;
     }

@@ -11,7 +11,7 @@
 
 ### 1. jdk动态代理
 
-jdk 的动态代理，要求被代理的对象所属类**必须实现一个以上的接口**，代理对象的创建使用 `Proxy.newProxyInstance` 方法，该方法中有三个参数
+**jdk 动态代理**，要求被代理的对象所属类**必须实现一个以上的接口**，代理对象的创建使用 `Proxy.newProxyInstance` 方法，该方法中有三个参数
 
 - `ClassLoader loader`：被代理的对象所属类的类加载器
 - `Class<?>[] interfaces`：被代理的对象所属类实现的接口
@@ -22,3 +22,16 @@ jdk 的动态代理，要求被代理的对象所属类**必须实现一个以�
 - `Object proxy`：**被代理后的**对象引用
 - `Method method`：代理对象**执行的方法**
 - `Object[] args`：代理对象**执行方法的参数列表**
+
+### 2. Cglib
+
+使用Cglib的**前提**: **被代理的类不能是 final 的**（ Cglib 动态代理会创建子类，final 类型的 Class 无法继承），
+**被代理的类必须有默认的 / 无参构造方法**（底层反射创建对象时拿不到构造方法参数）
+
+**Cglib 动态代理**创建代理对象使用`Enhancer.create`方法，这个方法需要两个参数
+
+- `Class type`：被代理的对象所属类的类型
+- `Callback callback`：增强的代码实现，创建的是`MethodInterceptor`对象，增强类的方法
+
+`MethodInterceptor`的 **`intercept`方法**相比于**`invoke方法`**多了一个`MethodProxy`参数，它是对Method的封装，
+用它能直接执行被代理对象的方法
