@@ -1,13 +1,14 @@
 package framework.spring.factory;
 
+import framework.spring.utils.LogUtils;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Bean的静态工厂
@@ -37,18 +38,29 @@ public class BeanFactory {
 
                         String proxyAdvisorClassName = BEAN_CONFIG.getProperty(beanName + ".proxy.class");
                         if (proxyAdvisorClassName != null && proxyAdvisorClassName.trim().length() > 0) {
-                            Class<?> proxyAdvisorClass = Class.forName(proxyAdvisorClassName);
-                            String[] methods = BEAN_CONFIG.getProperty(beanName + ".proxy.methods").split(",");
-
-                            InvocationHandler proxyHandler = (InvocationHandler) proxyAdvisorClass
-                                    .getConstructors()[0].newInstance(bean, Arrays.asList(methods));
+                            List<String> methods =
+                                    Arrays.asList(BEAN_CONFIG.getProperty(beanName + ".proxy.methods").split(","));
 
                             // 动态代理类
-                            Object proxy = Proxy.newProxyInstance(bean.getClass().getClassLoader(),
-                                    bean.getClass().getInterfaces(),
-                                    proxyHandler);
+                            if (proxyAdvisorClassName.contains("LogAdvisor")) {
+                                Class<?> proxyAdvisorClass = Class.forName(proxyAdvisorClassName);
+                                Object proxy = proxyAdvisorClass.getConstructors()[0].newInstance(bean, methods);
 
-                            bean = proxy;
+                                bean = Proxy.newProxyInstance(bean.getClass().getClassLoader(),
+                                        bean.getClass().getInterfaces(),
+                                        (InvocationHandler) proxy);
+                            } else {
+                                Object finalBean = bean;
+                                bean = Enhancer.create(bean.getClass(),
+                                        (MethodInterceptor) (o, method, objects, methodProxy) -> {
+                                    if (methods.contains(method.getName())) {
+                                        LogUtils.printLog(finalBean.getClass().getName(), method.getName(), objects);
+                                    }
+
+                                    return method.invoke(finalBean, objects);
+                                });
+                            }
+
                         }
 
                         beanCache.put(beanName, bean);
