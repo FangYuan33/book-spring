@@ -1,6 +1,11 @@
 package framework.spring.service.impl;
 
+import framework.spring.annotation.Log;
+import org.springframework.stereotype.Component;
+
+@Component
 public class FinanceService {
+    @Log
     public void addMoney(double money) {
         System.out.println("FinanceService 收钱 === " + money);
     }

@@ -1,6 +1,6 @@
 ## aop_easy
 
-![img.png](img.png)
+![img.png](images/aop_easy/img.png)
 
 只要方法的**开始 / 结束**都有相同的逻辑，那我们就可以把这些逻辑都拿出来视为一体，这个思想就叫**横切**。
 图中红框我们称它为**横切面Aspect**，**表示的是分布在一个 / 多个类的多个方法中的相同逻辑。**
@@ -76,3 +76,9 @@ AOP 要完成的核心工作还是一个：**解耦**。AOP 将分散在各个�
    - 可以使用*作为通配符
    - 在参数列表中标注一个*，代表方法的参数列表必须有一个参数
    - `..`来指定方法有任意个参数，也可以没有参数
+
+### 5. 注解配置AOP
+
+- 使AOP注解生效，要标记上`EnableAspectJAutoProxy`注解
+- 上述execution相关的都是可以在 **@Before、@After、@AfterReturning、@AfterThrowing、@Around** 中使用的
+- 注解 `@PointCut` 标记在一个**空方法**上，注解中可以**配置execution**或**注解**切入，**供五种通知类型注解使用**

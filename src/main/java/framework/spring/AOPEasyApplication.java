@@ -1,15 +1,35 @@
 package framework.spring;
 
+import framework.spring.config.AspectJAOPConfiguration;
 import framework.spring.factory.PartnerPlatform;
 import framework.spring.pojo.Player;
+import framework.spring.proxy.Logger;
 import framework.spring.proxy.Partner;
+import framework.spring.service.OrderService;
 import framework.spring.service.impl.FinanceService;
+import framework.spring.service.impl.OrderServiceImpl;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class AOPEasyApplication {
 
     public static void main(String[] args) {
-        xmlProxy();
+        annotationProxy();
+    }
+
+    private static void annotationProxy() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(AspectJAOPConfiguration.class, Logger.class,OrderServiceImpl.class, FinanceService.class);
+        context.refresh();
+
+        OrderService orderService = context.getBean(OrderService.class);
+//        orderService.getOrderById("FY");
+//        orderService.createOrder();
+
+        FinanceService financeService = context.getBean(FinanceService.class);
+        financeService.addMoney(33);
+//        financeService.getMoneyById("FY");
+//        financeService.subtractMoney(11);
     }
 
     private static void xmlProxy() {

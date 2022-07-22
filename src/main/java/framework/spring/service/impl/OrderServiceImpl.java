@@ -1,7 +1,9 @@
 package framework.spring.service.impl;
 
 import framework.spring.service.OrderService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderServiceImpl implements OrderService {
     @Override
     public void createOrder() {
