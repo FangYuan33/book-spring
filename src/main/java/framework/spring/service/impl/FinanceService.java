@@ -38,8 +38,7 @@ public class FinanceService {
     @Transactional
     public void transfer(Long source, Long target, int money) throws SQLException {
         financeDao.subtractMoney(source, money);
-        System.out.println(1/0);
-
+//        System.out.println(1/0);
         financeDao.addMoney(target, money);
         System.out.println(source + "转账给" + target + " " + money + "元");
     }
