@@ -23,13 +23,13 @@ public class AOPEasyApplication {
         context.refresh();
 
         OrderService orderService = context.getBean(OrderService.class);
-//        orderService.getOrderById("FY");
-//        orderService.createOrder();
+        orderService.getOrderById("FY");
+        orderService.createOrder();
 
         FinanceService financeService = context.getBean(FinanceService.class);
         financeService.addMoney(33);
-//        financeService.getMoneyById("FY");
-//        financeService.subtractMoney(11);
+        financeService.getMoneyById("FY");
+        financeService.subtractMoney(11);
     }
 
     private static void xmlProxy() {
