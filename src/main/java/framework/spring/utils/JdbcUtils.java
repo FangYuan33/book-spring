@@ -16,7 +16,7 @@ public class JdbcUtils {
                 return connectThreadLocal.get();
             }
 
-            Connection connection = DriverManager.getConnection(JDBC_URL, "root", "Yilong981223");
+            Connection connection = DriverManager.getConnection(JDBC_URL, "root", "xxxxx");
             connectThreadLocal.set(connection);
 
             return connection;
