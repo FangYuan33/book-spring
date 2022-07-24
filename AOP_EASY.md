@@ -36,6 +36,14 @@
 `MethodInterceptor`的 **`intercept`方法**相比于**`invoke方法`**多了一个`MethodProxy`参数，它是对Method的封装，
 用它能直接执行被代理对象的方法
 
+```
+// 执行 代理对象 的方法
+method.invoke(proxy, args);
+
+// 执行 原始对象(被代理对象) 的方法
+methodProxy.invokeSuper(proxy, args);
+```
+
 ### 3. 理解AOP
 
 **AOP面向切面编程，它是对面向对象对象编程（OOP）的补充。OOP关注的是对象，AOP的关注是切面。

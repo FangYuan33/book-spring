@@ -14,7 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class AOPEasyApplication {
 
     public static void main(String[] args) {
-        annotationProxy();
+        jdkCglib();
     }
 
     private static void annotationProxy() {
@@ -47,11 +47,11 @@ public class AOPEasyApplication {
 
         Partner partner = PartnerPlatform.getPartner(100);
 
-        partner.receiveMoney(0);
+        partner.receiveMoney(110);
         partner.playWith(player);
 
         Partner cglibPartner = PartnerPlatform.getCglibPartner(100);
-        cglibPartner.receiveMoney(100);
+        cglibPartner.receiveMoney(0);
         cglibPartner.playWith(player);
     }
 }

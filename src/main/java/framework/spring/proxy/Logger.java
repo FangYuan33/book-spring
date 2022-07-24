@@ -24,7 +24,7 @@ public class Logger {
     @Pointcut("execution(* framework.spring.service.*.*(String))")
     public void defaultPointcut(){}
 
-//    @Before("execution(public * framework.spring.service.impl.FinanceService.*(..))")
+    @Before("execution(public * framework.spring.service.impl.FinanceService.*(..))")
     public void beforePrint() {
         System.out.println("Logger beforePrint run ......");
     }

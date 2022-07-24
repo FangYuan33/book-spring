@@ -22,7 +22,7 @@ public class IntroductionAspect {
             defaultImpl = MoneyValidatorImpl.class)
     private MoneyValidator moneyValidator;
 
-    @Before("execution(* framework.spring.service.impl.FinanceService.transfer(..))")
+//    @Before("execution(* framework.spring.service.impl.FinanceService.transfer(..))")
     public void beforeTransfer(JoinPoint joinPoint) {
         int money = (int) joinPoint.getArgs()[2];
 
