@@ -69,4 +69,9 @@ public class Logger {
             System.out.println("Logger aroundPrint after run ......");
         }
     }
+
+    /**
+     * 没有声明通知注解的方法也会被过滤掉
+     */
+    public void testAopGet() {}
 }
