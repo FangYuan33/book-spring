@@ -68,3 +68,18 @@ AOP 的核心后置处理器是 `AnnotationAwareAspectJAutoProxyCreator`
 - **CommonsPool2TargetSource**：内部维护了一个对象池，每次 getTarget 时从对象池中取
 - **ThreadLocalTargetSource**：每次 getTarget 都会从它所处的线程中取目标对象
 - **HotSwappableTargetSource**：内部维护了一个可以热替换的目标对象引用，每次 getTarget 的时候都返回它
+
+### 4. Bean是如何被AOP代理的
+bean的初始化会被 `BeanPostProcessor` 的 `postProcessAfterInitialization方法` 处理，
+代理对象的创建即在 `AbstractAutoProxyCreator` 的 `postProcessAfterInitialization方法`中，其中调用了 `wrapIfNecessary方法`
+
+#### 4.1 wrapIfNecessary方法
+
+在这个方法中，它会去**找到这个bean下所有的增强器（Advisor）**，另外它会**加一个默认的**`new DefaultPointcutAdvisor(INSTANCE)`增强器，
+其中`INSTANCE`是单例的设计，它的类型是 `ExposeInvocationInterceptor`
+
+这个`INSTANCE`有啥用呢？去它的类里看看，有如下方法
+
+![](default.jpg)
+
+找到所有的增强器后，之后便是创建代理对象，**如果要代理的对象本身是接口或者已经被jdk动态代理了，那么就采用jdk动态代理，否则使用的是Cglib动态代理**
