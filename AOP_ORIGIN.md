@@ -1,4 +1,7 @@
 ## aop_origin
+
+原理: **AOP的底层设计是由运行时动态代理支撑，在 bean 的初始化流程中，借助 BeanPostProcessor 将原始的目标对象织入通知，生成代理对象。**
+
 ### 1. AOP代理的底层核心后置处理器
 AOP 的核心后置处理器是 `AnnotationAwareAspectJAutoProxyCreator`
 
