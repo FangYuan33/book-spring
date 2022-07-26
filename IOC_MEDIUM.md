@@ -31,7 +31,7 @@ BeanFactory的基础特性：
 
 #### 1.3 ConfigurableBeanFactory
 
-`Configurable` **开头**的 BeanFactory 或者 ApplicationContext 就具有了 set（可写）的操作，
+`Configurable` **开头**的 BeanFactory 或者 ApplicationContext 就具有了 **set（可写）** 的操作，
 可以调用里边儿的定义的方法对BeanFactory进行修改和扩展等，但是它不推荐给开发者使用，因为在程序运行期间不应该对BeanFactory进行频繁的变动。
 
 ### 2. BeanFactory的实现类们
