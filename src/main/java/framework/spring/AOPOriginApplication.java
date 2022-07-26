@@ -15,5 +15,9 @@ public class AOPOriginApplication {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(AspectJAOPConfiguration.class, FinanceService.class, FinanceDao.class, Logger.class);
         context.refresh();
+
+        FinanceService financeService = context.getBean(FinanceService.class);
+
+        financeService.addMoney(33);
     }
 }

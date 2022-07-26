@@ -24,19 +24,19 @@ public class Logger {
     @Pointcut("execution(* framework.spring.service.*.*(String))")
     public void defaultPointcut(){}
 
-    @Before("execution(public * framework.spring.service.impl.FinanceService.*(..))")
+//    @Before("execution(public * framework.spring.service.impl.FinanceService.*(..))")
     public void beforePrint() {
         System.out.println("Logger beforePrint run ......");
     }
 
-    @After("execution(* framework.spring.service.*.*(String))")
+    @After("logAnnotation()")
     public void afterPrint() {
-        System.out.println("Logger afterPrint run ......");
+        System.out.println("Logger after Print run ......");
     }
 
-    @AfterReturning(value = "defaultPointcut()", returning = "returnValue")
+    @AfterReturning(value = "logAnnotation()", returning = "returnValue")
     public void afterReturningPrint(Object returnValue) {
-        System.out.println("Logger afterReturningPrint run ......");
+        System.out.println("Logger afterReturning Print run ......");
         System.out.println("返回的数据: " + returnValue);
     }
 

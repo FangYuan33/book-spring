@@ -83,3 +83,25 @@ bean的初始化会被 `BeanPostProcessor` 的 `postProcessAfterInitialization�
 ![](default.jpg)
 
 找到所有的增强器后，之后便是创建代理对象，**如果要代理的对象本身是接口或者已经被jdk动态代理了，那么就采用jdk动态代理，否则使用的是Cglib动态代理**
+
+### 5. 代理对象的底层执行逻辑
+
+核心步骤就两步：**获取增强器链**、**执行增强器**，源码点起来还是太绕了...
+
+#### 5.1 Aspect中的四种通知在源码中的实现
+
+- **@Before**
+
+![](before.jpg)
+
+- **@After**
+
+![](after.jpg)
+
+- **@AfterReturning**
+
+![](afterReturing.jpg)
+
+- **@AfterThrowing**
+
+![](afterThrowing.jpg)
