@@ -91,7 +91,7 @@ bean的初始化会被 `BeanPostProcessor` 的 `postProcessAfterInitialization�
 
 核心步骤就两步：**获取增强器链**、**执行增强器**，源码点起来还是太绕了...
 
-#### 5.1 Aspect中的四种通知在源码中的实现
+### 6. Aspect中的四种通知在源码中的实现
 
 - **@Before**
 
