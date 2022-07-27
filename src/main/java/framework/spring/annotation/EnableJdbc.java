@@ -1,6 +1,6 @@
 package framework.spring.annotation;
 
-import framework.spring.config.JdbcConfig;
+import framework.spring.config.JdbcConfigSelector;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -8,6 +8,6 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(JdbcConfig.class)
+@Import(JdbcConfigSelector.class)
 public @interface EnableJdbc {
 }
