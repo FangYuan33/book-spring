@@ -1,25 +1,18 @@
 package framework.spring;
 
 import framework.spring.config.DataSourceConfig;
-import framework.spring.pojo.User;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import framework.spring.dao.UserDao;
+import framework.spring.dao.impl.UserDaoImpl;
 
-import java.util.List;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class JdbcTemplateQuickstartApplication {
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfig.class);
-        JdbcTemplate jdbcTemplate = context.getBean(JdbcTemplate.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(DataSourceConfig.class, UserDaoImpl.class);
+        context.refresh();
 
-        initialJdbcTemplate(jdbcTemplate);
-    }
-
-    private static void initialJdbcTemplate(JdbcTemplate jdbcTemplate) {
-//        jdbcTemplate.execute("insert into tbl_user (name, tel) values ('FangYuan', '12345')");
-
-        List<User> users = jdbcTemplate.query("select * from tbl_user", new BeanPropertyRowMapper<>(User.class));
-        users.forEach(System.out::println);
+        UserDao userDao = context.getBean(UserDao.class);
+        userDao.selectAll().forEach(System.out::println);
     }
 }
