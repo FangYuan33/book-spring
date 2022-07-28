@@ -63,3 +63,92 @@
 - **NEVER**: **当前方法不允许运行在事务中，如果当前已经有事务运行，则抛出异常**
 - **NESTED**: **如果当前没有事务运行，则开启一个新的事务；如果当前已经有事务运行，则会记录一个保存点，并继续运行在当前事务中。
   如果子事务运行中出现异常，则不会全部回滚，而是回滚到上一个保存点**
+
+### 5. Spring事务的三大核心
+SpringFramework 的事务控制模型，实际上是三个最顶层的接口：
+1. **PlatformTransactionManager**：平台事务管理器
+2. **TransactionDefinition**：事务定义
+
+事务定义，或者叫事务属性，类似于Bean的 `BeanDefinition`，其中包含了在 `@Transactional` 注解中的属性
+- 事务隔离级别
+- 事务传播行为
+- 是否为读写事务
+- 超时时间
+- ...
+
+3. **TransactionStatus**：事务状态
+
+这里边儿记录的是当前事务的运行状态：
+- 是否是一个全新的事务
+- 是否有保存点
+- 事务是否完成
+- ...
+
+它是 SpringFramework 内部用来控制事务的封装的，开发用不到
+
+#### 5.1 PlatformTransactionManager
+
+平台事务管理器，这个接口中有如下三个方法
+
+```java
+public interface PlatformTransactionManager extends TransactionManager {
+    
+	TransactionStatus getTransaction(@Nullable TransactionDefinition definition) throws TransactionException;
+    
+	void commit(TransactionStatus status) throws TransactionException;
+    
+	void rollback(TransactionStatus status) throws TransactionException;
+}
+```
+
+- **getTransaction**: 传入 `TransactionDefinition` ，返回 `TransactionStatus` ，很明显它是根据一个事务的定义信息，查询事务当前的状态
+- **commit**：提交事务，它需要传入事务当前的状态，来判断当前事务是否允许提交
+- **rollback**：回滚事务，它也需要传入事务当前的状态，以此判断当前事务是否允许回滚
+
+**SpringFramework 事务控制的核心思路**: 根据 `TransactionDefinition` 去 `PlatformTransactionManager` 中查询事务当前的状态，
+并可以依据此状态来决定事务的最终提交或回滚
+
+#### 5.2 PlatformTransactionManager的层级关系
+
+![img.png](img.png)
+
+##### 5.2.1 ResourceTransactionManager
+基于资源的事务管理器，看它的实现类我们可以推测出，这个"资源"是数据库的数据源
+
+##### 5.2.2 DataSourceTransactionManager
+**用 jdbc 或者 MyBatis 作为持久层框架，都是配置它作为事务管理器的实现**。它内部就**组合**了一个 DataSource
+
+#### 5.3 TransactionDefinition
+
+![img_1.png](img_1.png)
+
+##### 5.3.1 TransactionAttribute
+
+```java
+public interface TransactionAttribute extends TransactionDefinition {
+    String getQualifier();
+    
+    boolean rollbackOn(Throwable ex);
+}
+```
+其中`rollbackOn方法`会判断事务定义中遇到**指定的异常**是否通知事务管理器回滚，
+它是支撑 `@Transactional 注解`中 `rollbackFor属性`的实现
+
+在 `DefaultTransactionAttribute` 这个实现类中，体现的便是对默认异常捕捉的实现，如下
+```java
+    public boolean rollbackOn(Throwable ex) {
+        return (ex instanceof RuntimeException || ex instanceof Error);
+    }
+```
+
+##### 5.3.2 TransactionTemplate
+`TransactionTemplate`也实现了 `TransactionDefinition`，`TransactionTemplate` 的构建，需要传入**事务管理器**，
+**由事务管理器来控制事务的提交和回滚**，由此联想到事务管理器接口的三个方法，
+因为 `TransactionTemplate` 是 `TransactionDefinition` 的实现类，那么就可以根据它来获取事务的状态，
+有了事务的状态，那么便能判断是否提交、回滚
+
+#### 5.4 TransactionStatus
+![img_2.png](img_2.png)
+
+`DefaultTransactionStatus` 是事务底层主要使用的 `TransactionStatus` 的实现类，
+SpringFramework 的事务控制中大多都是用 `DefaultTransactionStatus` 记录事务状态信息。
