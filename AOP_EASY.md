@@ -17,7 +17,7 @@
 - `Class<?>[] interfaces`：被代理的对象所属类实现的接口
 - `InvocationHandler h`：代理的具体代码实现
 
-具体实现在 `InvocationHandler`的**`invoke方法`**中，这个方法的有三个参数
+具体实现在 `InvocationHandler`的`invoke方法`中，这个方法的有三个参数
 
 - `Object proxy`：**被代理后的**对象引用
 - `Method method`：代理对象**执行的方法**
@@ -33,7 +33,7 @@
 - `Class type`：被代理的对象所属类的类型
 - `Callback callback`：增强的代码实现，创建的是`MethodInterceptor`对象，增强类的方法
 
-`MethodInterceptor`的 **`intercept`方法**相比于**`invoke方法`**多了一个`MethodProxy`参数，它是对Method的封装，
+`MethodInterceptor`的 **`intercept`方法**相比于`invoke方法`多了一个`MethodProxy`参数，它是对Method的封装，
 用它能直接执行被代理对象的方法
 
 ```

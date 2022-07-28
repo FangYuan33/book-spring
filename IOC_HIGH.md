@@ -14,7 +14,7 @@
 ![img_7.png](images/ioc_high/img_7.png)
 
 - **PropertyResolver**: 可以获取配置元信息，同时也可以解析占位符的信息
-- **ConfigurableEnvironment**: 扩展了set方法，Configurable... 可写
+- **ConfigurableEnvironment**: 扩展了set方法 (Configurable... 可写)
 - **StandardEnvironment**: SpringFramework 中默认使用的标准运行时环境的实现
 
 #### 1.2 Environment中关于profiles的原理
@@ -68,7 +68,7 @@ private final ConfigurablePropertyResolver propertyResolver =
 #### 2.3 BeanDefinition是如何生成的
 
 1. 通过**xml加载的BeanDefinition**，它的读取工具是`XmlBeanDefinitionReader`，它会解析xml配置文件，最终在`DefaultBeanDefinitionDocumentReader`
-   的`doRegisterBeanDefinitions方法`下，创建BeanDefinition
+   的`doRegisterBeanDefinitions方法`下，创建`BeanDefinition`
 2. 通过**注解和组件扫描构造的BeanDefinition**，它的扫描工具是`ClassPathBeanDefinitionScanner`，
    调用`doScan核心方法`，创建`ScannedGenericBeanDefinition`并返回
 3. **配置类和@Bean注解构造的BeanDefinition**最复杂，最终创建出`ConfigurationClassBeanDefinition`返回
@@ -104,9 +104,9 @@ private final ConfigurablePropertyResolver propertyResolver =
 接口中的方法体现以上两个作用：
 
 - `postProcessBeforeInstantiation`: **拦截 bean 原本的实例化方法，转为用这里的实例化**
-- `postProcessProperties`: **在属性赋值之前触发，该方法返回键值对参与bean的赋值**
-- `postProcessAfterInstantiation`: **这个方法返回Boolean值，控制** `postProcessProperties` **方法的执行，
+- `postProcessAfterInstantiation`: **这个方法返回Boolean值，控制** `postProcessProperties` **方法的执行， 
   返回false不执行**`postProcessProperties`方法
+- `postProcessProperties`: **在属性赋值之前触发，该方法返回键值对参与bean的赋值**
 
 在生命周期中的体现
 

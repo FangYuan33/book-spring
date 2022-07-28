@@ -38,7 +38,7 @@ beanName没有在BeanDefinition中保存，而是**封装在了BeanDefinitionHol
 
 #### 2.2 注解配置类的BeanDefinition的加载
 
-注解配置类的解析发生在 `ApplicationContext` 中 `refresh`方法的 `BeanDefinitionRegistryPostProcessor` 的执行阶段，
+注解配置类的解析发生在 `ApplicationContext` 执行 `refresh`方法时 `BeanDefinitionRegistryPostProcessor` 的执行阶段，
 它对应的**核心后置处理器**是 `ConfigurationClassPostProcessor` ，执行 `postProcessBeanDefinitionRegistry`方法，
 来**解析配置类**和**注册BeanDefinition**。使用`ClassPathBeanDefinitionScanner`实现包扫描的BeanDefinition封装，
 使用`ConfigurationClassBeanDefinitionReader`实现`@Bean`注解的`BeanDefinition`封装，最后封装到 `BeanDefinitionRegistry` 中
@@ -163,7 +163,7 @@ bean对象在销毁时，由`ApplicationContext`发起关闭`close()`动作，�
 **自定义的 `BeanDefinitionRegistryPostProcessor`，在没有实现`PriorityOrdered`接口时，
 执行时机要比内置的 `ConfigurationClassPostProcessor` 晚**
 
-##### 6.1.3 BeanFactoryPostProcessor、
+##### 6.1.3 BeanFactoryPostProcessor
 
 `BeanFactoryPostProcessor` 的切入时机紧随 `BeanDefinitionRegistryPostProcessor` 之后，
 在此时的回调能拿到的参数是 `ConfigurableListableBeanFactory`，提供的是对 `BeanDefinition` **获取和修改的权限**
@@ -191,7 +191,7 @@ bean对象在销毁时，由`ApplicationContext`发起关闭`close()`动作，�
 
 **返回ture或false来控制是否继续走接下来的 populateBean 和 initializeBean 方法初始化 bean**
 
-##### 6.2.4 InstantiationAwareBeanPostProcessor#postProcessProperties
+##### 6.2.4 InstantiationAwareBeanPostProcessor的postProcessProperties方法
 
 这个方法将对bean对象对应的 `PropertyValues` 中封装赋值和注入的数据应用给 bean 实例
 
