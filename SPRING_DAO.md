@@ -152,3 +152,57 @@ public interface TransactionAttribute extends TransactionDefinition {
 
 `DefaultTransactionStatus` 是事务底层主要使用的 `TransactionStatus` 的实现类，
 SpringFramework 的事务控制中大多都是用 `DefaultTransactionStatus` 记录事务状态信息。
+
+### 6. 声明式事务的生效原理
+#### 6.1 @EnableTransactionManagement
+
+- **proxyTargetClass**: 默认为false，代表有接口便使用jdk动态代理，无接口使用Cglib动态代理，如果改为true，那么都使用Cglib动态代理
+- mode: 不常用，默认配置为PROXY运行期增强，或者选择ASPECT类加载时期增强
+- order: 指定事务通知的执行顺序
+
+#### 6.2 TransactionManagementConfigurationSelector
+
+启用事务管理注解导入的核心选择器，如下
+```java
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import(TransactionManagementConfigurationSelector.class)
+public @interface EnableTransactionManagement {
+    ...
+}
+```
+
+它会根据mode配置，注入 `AutoProxyRegistrar`， `ProxyTransactionManagementConfiguration` 两个组件
+
+##### 6.2.1 AutoProxyRegistrar
+
+在这个组件中注册了一个 `InfrastructureAdvisorAutoProxyCreator` 的bean，**它是AOP的代理创建器**，
+而且**只关心ROLE为** `ROLE_INFRASTRUCTURE` 的 `BeanDefinition`
+
+##### 6.2.2 ProxyTransactionManagementConfiguration
+
+它在其中会配置三个组件，**transactionAttributeSource事务配置源**，**transactionInterceptor事务拦截器**和**transactionAdvisor事务增强器**
+
+- transactionAttributeSource事务配置源
+
+其中有 `getTransactionAttribute方法`，可以根据 一个**具体类**中的**方法**，将其解析转换为 `TransactionDefinition` (`TransactionAttribute`)
+
+创建的`TransactionAttributeSource`的实现类是 `AnnotationTransactionAttributeSource`，
+**作用是读取和解析标注有 `@Transactional` 注解的方法**
+
+- transactionAdvisor事务增强器
+
+它的实现类是 `BeanFactoryTransactionAttributeSourceAdvisor`，
+其中组合了 **TransactionAttributeSource事务配置源**和**TransactionInterceptor事务拦截器**
+
+`TransactionAttributeSourcePointcut`根据 `TransactionAttributeSource`来判断，其中核心`matches方法`如下
+```java
+	@Override
+	public boolean matches(Method method, Class<?> targetClass) {
+		TransactionAttributeSource tas = getTransactionAttributeSource();
+		return (tas == null || tas.getTransactionAttribute(method, targetClass) != null);
+	}
+```
+它就是拿 TransactionAttributeSource 去根据方法和方法所属类，判断是否有对应的事务定义信息（是否被 @Transactional 注解标注）
+
