@@ -173,7 +173,8 @@ public @interface EnableTransactionManagement {
 }
 ```
 
-它会根据mode配置，注入 `AutoProxyRegistrar`， `ProxyTransactionManagementConfiguration` 两个组件
+`TransactionManagementConfigurationSelector` 会根据mode配置，
+注入 `AutoProxyRegistrar`， `ProxyTransactionManagementConfiguration` 两个组件
 
 ##### 6.2.1 AutoProxyRegistrar
 
@@ -191,10 +192,31 @@ public @interface EnableTransactionManagement {
 创建的`TransactionAttributeSource`的实现类是 `AnnotationTransactionAttributeSource`，
 **作用是读取和解析标注有 `@Transactional` 注解的方法**
 
-- transactionAdvisor事务增强器
+- transactionInterceptor事务拦截器
+
+是一个 `MethodInterceptor`对象，可以理解它为**切面**（事务的切入点和增强的逻辑）。
+`TransactionInterceptor`继承自`TransactionAspectSupport`，主要的事务管理逻辑实现在该基类中
+
+- transactionAdvisor事务增强器(AOP)
 
 它的实现类是 `BeanFactoryTransactionAttributeSourceAdvisor`，
 其中组合了 **TransactionAttributeSource事务配置源**和**TransactionInterceptor事务拦截器**
+
+```java
+	public BeanFactoryTransactionAttributeSourceAdvisor transactionAdvisor(
+			TransactionAttributeSource transactionAttributeSource, TransactionInterceptor transactionInterceptor) {
+
+		BeanFactoryTransactionAttributeSourceAdvisor advisor = new BeanFactoryTransactionAttributeSourceAdvisor();
+                // 组合 事务配置源 和 事务拦截器
+		advisor.setTransactionAttributeSource(transactionAttributeSource);
+		advisor.setAdvice(transactionInterceptor);
+        
+		if (this.enableTx != null) {
+			advisor.setOrder(this.enableTx.<Integer>getNumber("order"));
+		}
+		return advisor;
+	}
+```
 
 `TransactionAttributeSourcePointcut`根据 `TransactionAttributeSource`来判断，其中核心`matches方法`如下
 ```java
@@ -204,5 +226,43 @@ public @interface EnableTransactionManagement {
 		return (tas == null || tas.getTransactionAttribute(method, targetClass) != null);
 	}
 ```
-它就是拿 TransactionAttributeSource 去根据方法和方法所属类，判断是否有对应的事务定义信息（是否被 @Transactional 注解标注）
+它就是拿 TransactionAttributeSource 去根据方法和方法所属类，判断是否有对应的事务定义信息（是否被 `@Transactional` 注解标注）
+
+### 7. 声明式事务的控制原理
+
+声明了 `@EnableTransactionManagement` 注解，**它会向 IOC 容器中注册事务通知增强器(TransactionAdvisor)，
+这个增强器会参与到 bean初始化时AOP后置处理逻辑中**，
+`TransactionAttributeSource事务配置源`来**检查被创建的 bean 中是否可以织入事务通知（标注 @Transactional 注解）**，
+检查后会以`TransactionAttribute的形式`保存到**本地缓存**中(`AbstractFallbackTransactionAttributeSource`)，
+**所以在真正触发事务拦截器的逻辑**，**需要取出事务定义信息时**，**就可以直接从缓存中取出**，而不需要重新解析了。
+
+`AbstractFallbackTransactionAttributeSource本地缓存`，**key是所有的方法**，**value是TransactionAttribute，也就是事务的定义**，
+当然一些**没有标注** `@Transactional` 注解的方法的value值为null
+
+```java
+	protected Object invokeWithinTransaction(Method method, @Nullable Class<?> targetClass,
+			final InvocationCallback invocation) throws Throwable {
+    
+        TransactionAttributeSource tas = getTransactionAttributeSource();
+        // 直接在本地缓存中取出
+        final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
+        final TransactionManager tm = determineTransactionManager(txAttr);
+
+        ...
+        
+        }
+```
+
+之后根据`TransactionAttribute`取出事务管理器 `TransactionManager`对应的实现类是 `DataSourceTransactionManager`，
+这下对应第5章介绍的三大核心组件的两个就都拿到了，而事务状态需要根据事务的执行结果来获取
+
+#### 7.1 事务控制的核心逻辑
+可以发现核心动作是环绕通知，只有4步，**开启事务**，**执行Service方法**，**异常回滚事务**，**没有异常提交事务**，如下
+
+![](事务控制的核心逻辑.jpg)
+
+事务执行成功准备提交时，会来到 `DataSourceTransactionManager`，获取`Connection`执行`commit方法`
+
+事务执行异常时，有一个**关键点**是**判断抛出的异常是否和在 @Transactional 中定义的异常一致**，**如果不一致则会正常提交事务**，
+**默认情况下针对** `RuntimeException` 和 `Error`，所以在标注 `@Transactional`注解时**应该指定异常类型才对**，**避免事务的异常提交**
 

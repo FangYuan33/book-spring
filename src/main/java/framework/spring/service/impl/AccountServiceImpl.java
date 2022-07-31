@@ -19,7 +19,7 @@ public class AccountServiceImpl implements AccountService {
         System.out.println(TransactionSynchronizationManager.getCurrentTransactionName());
         accountDao.subtractMoney(sourceId, money);
 
-//        int i = 1 / 0;
+        int i = 1 / 0;
 
         accountDao.addMoney(targetId, money);
     }

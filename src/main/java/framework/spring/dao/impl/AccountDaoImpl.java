@@ -16,7 +16,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void subtractMoney(Integer userId, int money) {
         System.out.println(TransactionSynchronizationManager.getCurrentTransactionName());
 
