@@ -23,6 +23,9 @@
 4. **serializable**: 可串行化 —— **解决脏读、不可重复读、幻读**
 
 ### 2. 编程式事务
+
+- 通过借助 `TransactionTemplate`，将业务逻辑写在`TransactionCallback`的内部，以此来达到事务控制的效果
+
 #### 2.1 DataSourceTransactionManager
 **基于数据源的事务管理器**。它实现的根接口 `PlatformTransactionManager` 有定义 `commit` 和 `rollback` 方法
 
@@ -30,6 +33,9 @@
 它提交和回滚事务的动作，就是拿的 `TransactionManager` 执行的 `commit` 和 `rollback` 方法
 
 ### 3. 声明式事务
+
+- 通过配置事务增强器 / 开启注解声明式事务，并配置通知方法 / 标注 `@Transactional` 注解，也可以实现事务控制
+
 #### 3.1 @Transactional
 
 - **isolation**：事务隔离级别, **默认是 DEFAULT**，即依据数据库默认的事务隔离级别来定
@@ -106,7 +112,7 @@ public interface PlatformTransactionManager extends TransactionManager {
 - **rollback**：回滚事务，它也需要传入事务当前的状态，以此判断当前事务是否允许回滚
 
 **SpringFramework 事务控制的核心思路**: 根据 `TransactionDefinition` 去 `PlatformTransactionManager` 中查询事务当前的状态，
-并可以依据此状态来决定事务的最终提交或回滚
+并可以依据此状态来决定事务的最终提交或回滚，**事务管理器，可以根据事务的定义，获取 / 控制事务的状态**
 
 #### 5.2 PlatformTransactionManager的层级关系
 
@@ -254,7 +260,40 @@ public @interface EnableTransactionManagement {
 ```
 
 之后根据`TransactionAttribute`取出事务管理器 `TransactionManager`对应的实现类是 `DataSourceTransactionManager`，
-这下对应第5章介绍的三大核心组件的两个就都拿到了，而事务状态需要根据事务的执行结果来获取
+这下对应第5章介绍的三大核心组件的两个就都拿到了，而**事务状态需要根据事务的定义来获取**，如下注释
+
+```java
+	protected TransactionInfo createTransactionIfNecessary(@Nullable PlatformTransactionManager tm,
+			@Nullable TransactionAttribute txAttr, final String joinpointIdentification) {
+
+		// 事务定义中没有name则使用方法名
+		if (txAttr != null && txAttr.getName() == null) {
+			txAttr = new DelegatingTransactionAttribute(txAttr) {
+				@Override
+				public String getName() {
+					return joinpointIdentification;
+				}
+			};
+		}
+
+		TransactionStatus status = null;
+		if (txAttr != null) {
+			if (tm != null) {
+                            // 这里根据事务定义来获取事务状态
+                            status = tm.getTransaction(txAttr);
+			}
+			else {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Skipping transactional joinpoint [" + joinpointIdentification +
+							"] because no transaction manager has been configured");
+				}
+			}
+		}
+		return prepareTransactionInfo(tm, txAttr, joinpointIdentification, status);
+	}
+```
+
+这个方法是**开启事务**的方法，底层中会获取到`Connection` 对象，执行 `setAutoCommit(false)方法`
 
 #### 7.1 事务控制的核心逻辑
 可以发现核心动作是环绕通知，只有4步，**开启事务**，**执行Service方法**，**异常回滚事务**，**没有异常提交事务**，如下
