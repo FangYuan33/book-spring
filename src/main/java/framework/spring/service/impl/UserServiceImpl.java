@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.List;
+
 @Component
 public class UserServiceImpl implements UserService {
 
@@ -27,5 +29,10 @@ public class UserServiceImpl implements UserService {
 
             return null;
         });
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.selectAll();
     }
 }
