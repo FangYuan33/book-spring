@@ -32,3 +32,15 @@
 而同源策略保护的是Cookie，如果你在访问某个网站时，发生了跨域，那么如果将该Cookie信息发送给其他网站，可能会造成信息安全问题
 
 `@CrossOrigin`注解标注在`Controller类`或`方法`上可以解决跨域问题，但是其本质上是在响应头上添加了`Access-Control-Allow-Origin: *`
+
+### 4. Spring MVC 的工作流程
+![img_1.png](img_1.png)
+
+`DispatcherServlet` 在接收到请求后，会委托 `HandlerMapping` **处理器映射器**根据 `@RequestMapping` 
+去找 `Handler`（一个标注了 @RequestMapping 注解的方法，就是一个 Handler ），封装成 `HandlerExecutionChain`对象返回，
+这个对象包含的是**涉及的拦截器和Handler**
+
+`DispatcherServlet`在拿到`HandlerExecutionChain`后，将其交给 `HandlerAdapter` **处理器适配器** 去执行**拦截器和Handler**，
+在执行完Handler之后，会封装一个`ModelAndView`对象返回，并交给`DispatcherServlet`。
+
+`DispatcherServlet`在拿到`ModelAndView`之后，将其转交给`ViewResolver`来渲染视图，渲染完之后将视图交给`DispatcherServlet`
