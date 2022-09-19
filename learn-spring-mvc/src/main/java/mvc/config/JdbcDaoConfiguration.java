@@ -18,7 +18,7 @@ public class JdbcDaoConfiguration {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/spring-webmvc?characterEncoding=utf8");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/spring-dao?characterEncoding=utf8&useSSL=false");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
         return dataSource;
