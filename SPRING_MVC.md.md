@@ -44,3 +44,6 @@
 在执行完Handler之后，会封装一个`ModelAndView`对象返回，并交给`DispatcherServlet`。
 
 `DispatcherServlet`在拿到`ModelAndView`之后，将其转交给`ViewResolver`来渲染视图，渲染完之后将视图交给`DispatcherServlet`
+
+- `HandlerMapping`: 根据请求的 uri ，找到能处理该请求的一个 Handler ，并组合可能匹配的拦截器，
+  包装为一个 `HandlerExecutionChain` 对象返回出去
