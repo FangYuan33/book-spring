@@ -17,7 +17,7 @@
 
 其中`preHandler`方法是**顺序执行**，`postHandler`和`afterCompletion`方法均为**逆序执行**
 
-![img.png](img.png)
+![img.png](images/spring_mvc/img.png)
 
 ### 3. 跨域
 跨域是由浏览器的**同源策略**引起的，什么是同源策略？
@@ -34,7 +34,7 @@
 `@CrossOrigin`注解标注在`Controller类`或`方法`上可以解决跨域问题，但是其本质上是在响应头上添加了`Access-Control-Allow-Origin: *`
 
 ### 4. Spring MVC 的工作流程
-![img_1.png](img_1.png)
+![img_1.png](images/spring_mvc/img_1.png)
 
 `DispatcherServlet` 在接收到请求后，会委托 `HandlerMapping` **处理器映射器**根据 `@RequestMapping` 
 去找 `Handler`（一个标注了 @RequestMapping 注解的方法，就是一个 Handler ），封装成 `HandlerExecutionChain`对象返回，
