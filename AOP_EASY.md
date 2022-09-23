@@ -17,7 +17,7 @@
 - `Class<?>[] interfaces`：被代理的对象所属类实现的接口
 - `InvocationHandler h`：代理的具体代码实现
 
-具体实现在 `InvocationHandler`的`invoke方法`中，这个方法的有三个参数
+具体实现在 `InvocationHandler`的`invoke方法`中，这个方法有三个参数
 
 - `Object proxy`：**被代理后的**对象引用
 - `Method method`：代理对象**执行的方法**
