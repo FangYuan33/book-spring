@@ -260,7 +260,7 @@ public @interface EnableTransactionManagement {
 ```
 
 之后根据`TransactionAttribute`取出事务管理器 `TransactionManager`对应的实现类是 `DataSourceTransactionManager`，
-这下对应第5章介绍的三大核心组件的两个就都拿到了，而**事务状态需要根据事务的定义来获取**，如下注释
+这下对应第5节介绍的三大核心组件的两个就都拿到了，而**事务状态需要根据事务的定义来获取**，如下注释
 
 ```java
 	protected TransactionInfo createTransactionIfNecessary(@Nullable PlatformTransactionManager tm,
