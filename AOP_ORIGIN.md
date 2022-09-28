@@ -34,7 +34,7 @@ AOP 的核心后置处理器是 `AnnotationAwareAspectJAutoProxyCreator`
 
 方法名顾名思义: **构建Aspect的增强器们**，整体逻辑并不难，需要注意的点
 
-- 获取bean的类型是通过`BeanFactory`获取的，而没有调用`getBean方法`，创建完bean后再获取类型，这样避免了bean的提前创建
+- 获取bean的类型是通过`BeanFactory`获取的，而没有调用`getBean方法`，这样避免了bean的提前创建
 
 之后会处理标有`@Aspect`注解的类，将其中的通知方法封装成增强器
 
