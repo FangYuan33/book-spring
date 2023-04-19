@@ -36,7 +36,7 @@ Spring的模块划分
 
 ### 4. Spring-MVC 笔记
 
-- [Spring-MVC](MD/MVC/SPRING_MVC.md)
+- [Spring-MVC](MD/MVC/MVC.md)
 
 ### 5. SpringBoot自动装配
 
