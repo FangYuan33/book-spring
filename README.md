@@ -41,3 +41,7 @@ Spring的模块划分
 ### 5. SpringBoot自动装配
 
 - [SpringBoot 自动装配](MD/SPRINGBOOT/SPRINGBOOT.md)
+
+### 6. Lifecycle
+
+- [Spring Lifecycle](MD/LIFECYCLE/LIFECYCLE.md)
