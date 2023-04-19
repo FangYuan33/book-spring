@@ -116,7 +116,7 @@ public interface PlatformTransactionManager extends TransactionManager {
 
 #### 5.2 PlatformTransactionManager的层级关系
 
-![img.png](images/spring_dao/img.png)
+![img.png](../../images/spring_dao/img.png)
 
 ##### 5.2.1 ResourceTransactionManager
 基于资源的事务管理器，看它的实现类我们可以推测出，这个"资源"是数据库的数据源
@@ -126,7 +126,7 @@ public interface PlatformTransactionManager extends TransactionManager {
 
 #### 5.3 TransactionDefinition
 
-![img_1.png](images/spring_dao/img_1.png)
+![img_1.png](../../images/spring_dao/img_1.png)
 
 ##### 5.3.1 TransactionAttribute
 
@@ -154,7 +154,7 @@ public interface TransactionAttribute extends TransactionDefinition {
 有了事务的状态，那么便能判断是否提交、回滚
 
 #### 5.4 TransactionStatus
-![img_2.png](images/spring_dao/img_2.png)
+![img_2.png](../../images/spring_dao/img_2.png)
 
 `DefaultTransactionStatus` 是事务底层主要使用的 `TransactionStatus` 的实现类，
 SpringFramework 的事务控制中大多都是用 `DefaultTransactionStatus` 记录事务状态信息。
@@ -298,7 +298,7 @@ public @interface EnableTransactionManagement {
 #### 7.1 事务控制的核心逻辑
 可以发现核心动作是环绕通知，只有4步，**开启事务**，**执行Service方法**，**异常回滚事务**，**没有异常提交事务**，如下
 
-![](images/spring_dao/事务控制的核心逻辑.jpg)
+![](../../images/spring_dao/事务控制的核心逻辑.jpg)
 
 事务执行成功准备提交时，会来到 `DataSourceTransactionManager`，获取`Connection`执行`commit方法`
 

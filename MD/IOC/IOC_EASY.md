@@ -1,7 +1,7 @@
 ## ioc_easy
 
 ### 1. 理解IOC
-![](images/ioc_easy/ioc-1.jpg)
+![](../../images/ioc_easy/ioc-1.jpg)
 
 IOC的实现有两种方式: **依赖查找**、**依赖注入**
 
@@ -13,7 +13,7 @@ IOC的实现有两种方式: **依赖查找**、**依赖注入**
 
 `setter注入`、`构造器注入`，像@Value注解注入也是setter注入，`参数注入`见下图
 
-![](images/ioc_easy/ioc-2.jpg)
+![](../../images/ioc_easy/ioc-2.jpg)
 
 Spring文档中的一个概念特别好：**DI 的思想是“推”**，它主张把组件需要的依赖“推”到组件的成员上；
 **DL 的思想是”拉“**，组件需要哪些依赖需要组件自己去 IOC 容器中“拉取”。
@@ -57,7 +57,7 @@ Bean注入大部分可以用`@Autowired`来解决
 
 Bean的类型包含**普通Bean**和**工厂Bean**，工厂Bean用来创建使用注解或xml配置创建起来比较麻烦或依赖具体业务场景的Bean，它的接口方法如下
 
-![](images/ioc_easy/ioc-3.jpg)
+![](../../images/ioc_easy/ioc-3.jpg)
 
 #### 6.1 理解BeanFactory与FactoryBean的区别
 
@@ -85,7 +85,7 @@ SpringFramework内置的作用域
 
 ### 8. Bean的生命周期
 
-![img.png](images/ioc_easy/img.png)
+![img.png](../../images/ioc_easy/img.png)
 
 一个对象从被创建，到被垃圾回收，可以宏观的划分为 5 个阶段：
 

@@ -7,10 +7,10 @@ AOP 的核心后置处理器是 `AnnotationAwareAspectJAutoProxyCreator`
 
 #### 1.1 AspectJAutoProxyRegistrar注册后置处理器的时机
 
-![](images/aop_origin/AOP1.jpg)
+![](../../images/aop_origin/AOP1.jpg)
 
 ### 2. AnnotationAwareAspectJAutoProxyCreator
-![img.png](images/aop_origin/img.png)
+![img.png](../../images/aop_origin/img.png)
 
 它实现了基础抽象类 `AbstractAutoProxyCreator`和一些接口，其中
 
@@ -38,13 +38,13 @@ AOP 的核心后置处理器是 `AnnotationAwareAspectJAutoProxyCreator`
 
 之后会处理标有`@Aspect`注解的类，将其中的通知方法封装成增强器
 
-![img_1.png](images/aop_origin/img_1.png)
+![img_1.png](../../images/aop_origin/img_1.png)
 
 首先它会把类中**所有的**方法都抽取出来，如上图所示，即使是没有标注任何注解的方法
 
 之后构建Advisors时，会调用`getAdvisor方法`，在这一步会将方法进一步筛选，**只剩下标有通知注解的方法**，如下
 
-![img_2.png](images/aop_origin/img_2.png)
+![img_2.png](../../images/aop_origin/img_2.png)
 
 包含的信息：**切入点表达式**和**通知方法**
 
@@ -54,11 +54,11 @@ AOP 的核心后置处理器是 `AnnotationAwareAspectJAutoProxyCreator`
 
 之前写的动态代理的例子都是如下图所示，直接代理的target对象
 
-![img_3.png](images/aop_origin/img_3.png)
+![img_3.png](../../images/aop_origin/img_3.png)
 
 但是实际上Spring为Target加了一层壳，这层壳就是`TargetSource`，如下图
 
-![img_4.png](images/aop_origin/img_4.png)
+![img_4.png](../../images/aop_origin/img_4.png)
 
 执行被代理对象的方法时，就需要这样调用 `method.invoke(targetSource.getTarget(), args)`
 
@@ -83,7 +83,7 @@ bean的初始化会被 `BeanPostProcessor` 的 `postProcessAfterInitialization�
 
 这个`INSTANCE`有啥用呢？去它的类里看看，有如下方法
 
-![](images/aop_origin/default.jpg)
+![](../../images/aop_origin/default.jpg)
 
 找到所有的增强器后，之后便是创建代理对象，**如果要代理的对象本身是接口或者已经被jdk动态代理了，那么就采用jdk动态代理，否则使用的是Cglib动态代理**
 
@@ -95,16 +95,16 @@ bean的初始化会被 `BeanPostProcessor` 的 `postProcessAfterInitialization�
 
 - **@Before**
 
-![](images/aop_origin/before.jpg)
+![](../../images/aop_origin/before.jpg)
 
 - **@After**
 
-![](images/aop_origin/after.jpg)
+![](../../images/aop_origin/after.jpg)
 
 - **@AfterReturning**
 
-![](images/aop_origin/afterReturing.jpg)
+![](../../images/aop_origin/afterReturing.jpg)
 
 - **@AfterThrowing**
 
-![](images/aop_origin/afterThrowing.jpg)
+![](../../images/aop_origin/afterThrowing.jpg)

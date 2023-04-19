@@ -78,12 +78,12 @@
 用于保存 `base package` 基础路径，也就是说，**在 @ComponentScan 中提到的没有指定扫描路径时，则会扫描启动类所在路径及其子路径**的实现是在这里做的。
 Debug看其中的方法如下，可以发现 `metadata` 就是我们的启动类，通过它获取到了根路径
 
-![img.png](images/springboot/img.png)
+![img.png](../../images/springboot/img.png)
 
 之后调用 `register()` 方法，目的是将 `base package` 保存起来供之后使用。
 在javadoc中有提到: 可以直接调用该方法手动注册根路径，但是并不推荐这么做，还是以启动类所在的路径作为根路径最好
 
-![img_1.png](images/springboot/img_1.png)
+![img_1.png](../../images/springboot/img_1.png)
 
 `base package` **用于在整合第三方组件时，通过获取到该路径并在该路径下扫描需要的 bean**
 
@@ -125,7 +125,7 @@ public static class AutoConfiguredMapperScannerRegistrar implements BeanFactoryA
 其中有 `process()` 方法，随着方法调用最终会借助 `SpringFactoriesLoader` 加载 `spring-boot-autoconfigure` 包 `META-INF` 目录下的 `spring.factories` 文件，
 这个文件中我们可以发现以 `@EnableAutoConfiguration` 注解为key，很多以 `XXXAutoConfiguration` 结尾的bean为values的内容，如下
 
-![img_2.png](images/springboot/img_2.png)
+![img_2.png](../../images/springboot/img_2.png)
 
 这里是对 `SPI` 服务寻找的应用，在Spring中支持以注解作为key的键值对（不局限于接口和抽象类），
 那么便可以通过 `@EnableAutoConfiguration` 注解寻找到所有自动装配类，配置的properties必须放在 `META-INF` 目录下，且文件名必须为 `spring.factories`

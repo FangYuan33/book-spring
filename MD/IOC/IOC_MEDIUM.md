@@ -1,6 +1,6 @@
 ## ioc_medium
 
-![img_1.png](images/ioc_medium/img_1.png)
+![img_1.png](../../images/ioc_medium/img_1.png)
 ### 1. BeanFactory和它的子接口们
 
 BeanFactory的基础特性：
@@ -35,7 +35,7 @@ BeanFactory的基础特性：
 可以调用里边儿的定义的方法对BeanFactory进行修改和扩展等，但是它不推荐给开发者使用，因为在程序运行期间不应该对BeanFactory进行频繁的变动。
 
 ### 2. BeanFactory的实现类们
-![img.png](images/ioc_medium/img.png)
+![img.png](../../images/ioc_medium/img.png)
 #### 2.1 AbstractBeanFactory
 
 它是BeanFactory**最基础的抽象实现类，具有基础的功能**，此外它还扩展了一些功能：别名的处理（来源于 AliasRegistry 接口）、
@@ -54,7 +54,7 @@ DefaultListableBeanFactory是BeanFactory的最终默认实现，它的作用是*
 再完成 Bean 的创建和初始化动作(AbstractAutowireCapableBeanFactory)**
 
 ### 3. ApplicationContext和它的上下辈们
-![img_2.png](images/ioc_medium/img_2.png)
+![img_2.png](../../images/ioc_medium/img_2.png)
 
 ApplicationContext是Spring中最核心的接口，在BeanFactory基础上扩展了**生命周期管理**，**Bean和BeanFactory的后置处理器**，**国际化**以及**事件发布机制**。
 
@@ -77,7 +77,7 @@ ApplicationContext实现了这个接口，那么它能拿到`Environment`对象�
 它内部保存着一些程序运行的配置。
 
 ### 4. ApplicationContext的实现类们
-![img_3.png](images/ioc_medium/img_3.png)
+![img_3.png](../../images/ioc_medium/img_3.png)
 
 #### 4.1 AbstractApplicationContext
 
@@ -113,7 +113,7 @@ ApplicationContext实现了这个接口，那么它能拿到`Environment`对象�
 在Spring中体现观察者模式的就是**事件驱动和监听器**，**监听器（Listener）对应订阅者**，事件源充当被观察的主题，用来发布事件，
 **IOC容器本身也是事件广播器，可以理解为观察者。** 可根据下图继续理解
 
-![img_4.png](images/ioc_medium/img_4.png)
+![img_4.png](../../images/ioc_medium/img_4.png)
 
 #### 5.2 了解Spring内置事件
 
@@ -126,7 +126,7 @@ Spring容器内置事件
 
 我们点击以上任意一个事件，都是根据`ApplicationContextEvent`进行扩展的，如下
 
-![](images/ioc_medium/ApplicationContextEvent.jpg)
+![](../../images/ioc_medium/ApplicationContextEvent.jpg)
 
 #### 5.3 自定义事件
 实现ApplicationEvent来自定义事件（直接实现它并没有太大意义，更像是具体业务的触发时机），创建对应事件的监听器，在其中完成想要的业务
@@ -167,7 +167,7 @@ public class BasePackageClassConfiguration {
 
 定义排除Animal注解的Bean，扫描范围如下
 
-![img_5.png](images/ioc_medium/img_5.png)
+![img_5.png](../../images/ioc_medium/img_5.png)
 
 #### 8.3 include
 

@@ -20,24 +20,24 @@ Spring的模块划分
 
 ### 1. IOC 部分笔记
 
-- [IOC入门](IOC_EASY.md)
-- [IOC进阶](IOC_MEDIUM.md)
-- [IOC高级](IOC_HIGH.md)
-- [IOC原理](IOC_ORIGIN.md)
+- [IOC入门](MD/IOC/IOC_EASY.md)
+- [IOC进阶](MD/IOC/IOC_MEDIUM.md)
+- [IOC高级](MD/IOC/IOC_HIGH.md)
+- [IOC原理](MD/IOC/IOC_ORIGIN.md)
 
 ### 2. AOP 部分笔记
 
-- [AOP入门](AOP_EASY.md)
-- [AOP原理](AOP_ORIGIN.md)
+- [AOP入门](MD/AOP/AOP_EASY.md)
+- [AOP原理](MD/AOP/AOP_ORIGIN.md)
 
 ### 3. Spring-DAO 事务笔记
 
-- [Spring-DAO 事务](SPRING_DAO.md)
+- [Spring-DAO 事务](MD/DAO/SPRING_DAO.md)
 
 ### 4. Spring-MVC 笔记
 
-- [Spring-MVC](SPRING_MVC.md)
+- [Spring-MVC](MD/MVC/SPRING_MVC.md)
 
 ### 5. SpringBoot自动装配
 
-- [SpringBoot 自动装配](SPRINGBOOT.md)
+- [SpringBoot 自动装配](MD/SPRINGBOOT/SPRINGBOOT.md)

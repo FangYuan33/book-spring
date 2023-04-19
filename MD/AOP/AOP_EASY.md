@@ -1,6 +1,6 @@
 ## aop_easy
 
-![img.png](images/aop_easy/img.png)
+![img.png](../../images/aop_easy/img.png)
 
 只要方法的**开始 / 结束**都有相同的逻辑，那我们就可以把这些逻辑都拿出来视为一体，这个思想就叫**横切**。
 图中红框我们称它为**横切面Aspect**，**表示的是分布在一个 / 多个类的多个方法中的相同逻辑。**
